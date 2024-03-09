@@ -78,3 +78,87 @@ const [firstValue, , [secondValue, thirdValue]] = nestedArray;
 // Default values: if there's no value, the variables are set to 1
 const [p = 1, q = 1, r = 1] = [420, 917];
 // console.log(p, q, r);
+
+/*
+ *
+ *
+ *
+ * Array practice
+ *
+ *
+ */
+const myCountry = 'Taiwan';
+const neighbors = ['Japan', 'Korea', 'China'];
+
+// Adds at the end of the array. Returns new length.
+// console.log(neighbors.push('Utopia'));
+// console.table(neighbors);
+
+// Adds at the beginning of the array. Returns new length.
+// console.log(neighbors.unshift('Canada'));
+// console.table(neighbors);
+
+// Removes the first item of the array. Returns item.
+// console.log(neighbors.shift());
+// console.table(neighbors);
+
+// Removes the last item of the array. Returns item.
+// console.log(neighbors.pop());
+// console.table(neighbors);
+
+// neighbors.push('Germany');
+
+// console.log(
+//   `Probably ${
+//     neighbors.includes('Germany') ? '' : 'not '
+//   }a central European country :D`
+// );
+
+function isJapan(country) {
+  return country === 'Japan';
+}
+
+// Puts array items thru function. Returns index or -1.
+const indexOfJapan = neighbors.findIndex(isJapan);
+neighbors[indexOfJapan] = 'Empire of Japan';
+// console.log(neighbors[indexOfJapan]);
+
+// Finds index in array. Returns index or -1.
+const japanIndex = neighbors.indexOf('Empire of Japan');
+neighbors[japanIndex] = 'Republic of Japan';
+// console.log(neighbors[japanIndex]);
+
+const country = {
+  officialName: 'Taiwan',
+  capital: 'Taipei',
+  population: 23,
+  languages: ['Mandarin', 'Hokkien'],
+  neighbors: ['Japan', 'Korea', 'China', 'Philippines', 'Vietnam', 'Ocean'],
+  describeCountry: function () {
+    let myString = `${this.officialName} has a population of ${this.population} million people which speaks mainly ${this.languages[0]}. Its neighbors include ${this.neighbors[0]}, ${this.neighbors[1]}, and ${this.neighbors[2]}. Its capital is ${this.capital}.`;
+    console.log(myString);
+  },
+  checkIsland: function () {
+    this.isIsland = this.neighbors.includes('Ocean') ? true : false;
+    console.log(this.isIsland);
+  },
+};
+// country.describeCountry();
+// country.checkIsland();
+
+country.capital = '台北';
+country['population'] = 24;
+
+const countrySentence = `${country.officialName} has a population of ${country.population} million people which speaks mainly ${country.languages[0]}. Its neighbors include ${country.neighbors[0]}, ${country.neighbors[1]}, and ${country.neighbors[2]}. Its capital is ${country.capital}.`;
+// console.log(countrySentence);
+
+const listOfNeighbors = [
+  ['Canada', 'Mexico'],
+  ['Spain'],
+  ['Norway', 'Sweden', 'Russia'],
+];
+for (let i = 0; i < listOfNeighbors.length; i++) {
+  for (let j = 0; j < listOfNeighbors[i].length; j++) {
+    // console.log(listOfNeighbors[i][j]);
+  }
+}
