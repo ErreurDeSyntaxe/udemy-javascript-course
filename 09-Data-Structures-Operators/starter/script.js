@@ -163,6 +163,16 @@ for (let i = 0; i < listOfNeighbors.length; i++) {
   }
 }
 
+/*
+ *
+ *
+ *
+ * Data Structure, Modern Operators and Strings
+ *
+ *
+ *
+ */
+
 const books = [
   {
     title: 'Algorithms',
@@ -387,3 +397,18 @@ const books = [
     highlighted: true,
   },
 ];
+
+const [firstBook, secondBook] = books;
+const [, , thirdBook] = books;
+
+const ratings = [
+  ['rating', 4.19],
+  ['ratingsCount', 14454],
+];
+const [[, rating], [, ratingsCount]] = ratings;
+
+const ratingStars = [63405, 1808];
+const [fiveStarRatings = 0, oneStarRatings = 0, threeStarRatings = 0] =
+  ratingStars;
+
+console.log(fiveStarRatings, oneStarRatings, threeStarRatings);
