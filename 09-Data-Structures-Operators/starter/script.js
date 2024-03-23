@@ -1,6 +1,233 @@
 'use strict';
 const log = console.log;
 
+// Data need for some exercises
+const books = [
+  {
+    title: 'Algorithms',
+    author: ['Robert Sedgewick', 'Kevin Wayne'],
+    publisher: 'Addison-Wesley Professional',
+    publicationDate: '2011-03-24',
+    edition: 4,
+    keywords: [
+      'computer science',
+      'programming',
+      'algorithms',
+      'data structures',
+      'java',
+      'math',
+      'software',
+      'engineering',
+    ],
+    pages: 976,
+    format: 'hardcover',
+    ISBN: '9780321573513',
+    language: 'English',
+    programmingLanguage: 'Java',
+    onlineContent: true,
+    year: 2011,
+    thirdParty: {
+      goodreads: {
+        rating: 4.41,
+        ratingsCount: 1733,
+        reviewsCount: 63,
+        fiveStarRatingCount: 976,
+        oneStarRatingCount: 13,
+      },
+    },
+    highlighted: true,
+  },
+  {
+    title: 'Structure and Interpretation of Computer Programs',
+    author: [
+      'Harold Abelson',
+      'Gerald Jay Sussman',
+      'Julie Sussman (Contributor)',
+    ],
+    publisher: 'The MIT Press',
+    publicationDate: '2022-04-12',
+    edition: 2,
+    keywords: [
+      'computer science',
+      'programming',
+      'javascript',
+      'software',
+      'engineering',
+    ],
+    pages: 640,
+    format: 'paperback',
+    ISBN: '9780262543231',
+    language: 'English',
+    programmingLanguage: 'JavaScript',
+    onlineContent: false,
+    thirdParty: {
+      goodreads: {
+        rating: 4.36,
+        ratingsCount: 14,
+        reviewsCount: 3,
+        fiveStarRatingCount: 8,
+        oneStarRatingCount: 0,
+      },
+    },
+    highlighted: true,
+  },
+  {
+    title: "Computer Systems: A Programmer's Perspective",
+    author: ['Randal E. Bryant', "David Richard O'Hallaron"],
+    publisher: 'Prentice Hall',
+    publicationDate: '2002-01-01',
+    edition: 1,
+    keywords: [
+      'computer science',
+      'computer systems',
+      'programming',
+      'software',
+      'C',
+      'engineering',
+    ],
+    pages: 978,
+    format: 'hardcover',
+    ISBN: '9780130340740',
+    language: 'English',
+    programmingLanguage: 'C',
+    onlineContent: false,
+    thirdParty: {
+      goodreads: {
+        rating: 4.44,
+        ratingsCount: 1010,
+        reviewsCount: 57,
+        fiveStarRatingCount: 638,
+        oneStarRatingCount: 16,
+      },
+    },
+    highlighted: true,
+  },
+  {
+    title: 'Operating System Concepts',
+    author: ['Abraham Silberschatz', 'Peter B. Galvin', 'Greg Gagne'],
+    publisher: 'John Wiley & Sons',
+    publicationDate: '2004-12-14',
+    edition: 10,
+    keywords: [
+      'computer science',
+      'operating systems',
+      'programming',
+      'software',
+      'C',
+      'Java',
+      'engineering',
+    ],
+    pages: 921,
+    format: 'hardcover',
+    ISBN: '9780471694663',
+    language: 'English',
+    programmingLanguage: 'C, Java',
+    onlineContent: false,
+    thirdParty: {
+      goodreads: {
+        rating: 3.9,
+        ratingsCount: 2131,
+        reviewsCount: 114,
+        fiveStarRatingCount: 728,
+        oneStarRatingCount: 65,
+      },
+    },
+  },
+  {
+    title: 'Engineering Mathematics',
+    author: ['K.A. Stroud', 'Dexter J. Booth'],
+    publisher: 'Palgrave',
+    publicationDate: '2007-01-01',
+    edition: 14,
+    keywords: ['mathematics', 'engineering'],
+    pages: 1288,
+    format: 'paperback',
+    ISBN: '9781403942463',
+    language: 'English',
+    programmingLanguage: null,
+    onlineContent: true,
+    thirdParty: {
+      goodreads: {
+        rating: 4.35,
+        ratingsCount: 370,
+        reviewsCount: 18,
+        fiveStarRatingCount: 211,
+        oneStarRatingCount: 6,
+      },
+    },
+    highlighted: true,
+  },
+  {
+    title: 'The Personal MBA: Master the Art of Business',
+    author: 'Josh Kaufman',
+    publisher: 'Portfolio',
+    publicationDate: '2010-12-30',
+    keywords: ['business'],
+    pages: 416,
+    format: 'hardcover',
+    ISBN: '9781591843528',
+    language: 'English',
+    thirdParty: {
+      goodreads: {
+        rating: 4.11,
+        ratingsCount: 40119,
+        reviewsCount: 1351,
+        fiveStarRatingCount: 18033,
+        oneStarRatingCount: 1090,
+      },
+    },
+  },
+  {
+    title: 'Crafting Interpreters',
+    author: 'Robert Nystrom',
+    publisher: 'Genever Benning',
+    publicationDate: '2021-07-28',
+    keywords: [
+      'computer science',
+      'compilers',
+      'engineering',
+      'interpreters',
+      'software',
+      'engineering',
+    ],
+    pages: 865,
+    format: 'paperback',
+    ISBN: '9780990582939',
+    language: 'English',
+    thirdParty: {
+      goodreads: {
+        rating: 4.7,
+        ratingsCount: 253,
+        reviewsCount: 23,
+        fiveStarRatingCount: 193,
+        oneStarRatingCount: 0,
+      },
+    },
+  },
+  {
+    title: 'Deep Work: Rules for Focused Success in a Distracted World',
+    author: 'Cal Newport',
+    publisher: 'Grand Central Publishing',
+    publicationDate: '2016-01-05',
+    edition: 1,
+    keywords: ['work', 'focus', 'personal development', 'business'],
+    pages: 296,
+    format: 'hardcover',
+    ISBN: '9781455586691',
+    language: 'English',
+    thirdParty: {
+      goodreads: {
+        rating: 4.19,
+        ratingsCount: 144584,
+        reviewsCount: 11598,
+        fiveStarRatingCount: 63405,
+        oneStarRatingCount: 1808,
+      },
+    },
+    highlighted: true,
+  },
+];
+
 // Data needed for first part of the section
 
 const wkdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -264,232 +491,6 @@ const learnAboutArrays = function () {
  */
 
 const learnAboutModernJS = function () {
-  const books = [
-    {
-      title: 'Algorithms',
-      author: ['Robert Sedgewick', 'Kevin Wayne'],
-      publisher: 'Addison-Wesley Professional',
-      publicationDate: '2011-03-24',
-      edition: 4,
-      keywords: [
-        'computer science',
-        'programming',
-        'algorithms',
-        'data structures',
-        'java',
-        'math',
-        'software',
-        'engineering',
-      ],
-      pages: 976,
-      format: 'hardcover',
-      ISBN: '9780321573513',
-      language: 'English',
-      programmingLanguage: 'Java',
-      onlineContent: true,
-      year: 2011,
-      thirdParty: {
-        goodreads: {
-          rating: 4.41,
-          ratingsCount: 1733,
-          reviewsCount: 63,
-          fiveStarRatingCount: 976,
-          oneStarRatingCount: 13,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'Structure and Interpretation of Computer Programs',
-      author: [
-        'Harold Abelson',
-        'Gerald Jay Sussman',
-        'Julie Sussman (Contributor)',
-      ],
-      publisher: 'The MIT Press',
-      publicationDate: '2022-04-12',
-      edition: 2,
-      keywords: [
-        'computer science',
-        'programming',
-        'javascript',
-        'software',
-        'engineering',
-      ],
-      pages: 640,
-      format: 'paperback',
-      ISBN: '9780262543231',
-      language: 'English',
-      programmingLanguage: 'JavaScript',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.36,
-          ratingsCount: 14,
-          reviewsCount: 3,
-          fiveStarRatingCount: 8,
-          oneStarRatingCount: 0,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: "Computer Systems: A Programmer's Perspective",
-      author: ['Randal E. Bryant', "David Richard O'Hallaron"],
-      publisher: 'Prentice Hall',
-      publicationDate: '2002-01-01',
-      edition: 1,
-      keywords: [
-        'computer science',
-        'computer systems',
-        'programming',
-        'software',
-        'C',
-        'engineering',
-      ],
-      pages: 978,
-      format: 'hardcover',
-      ISBN: '9780130340740',
-      language: 'English',
-      programmingLanguage: 'C',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.44,
-          ratingsCount: 1010,
-          reviewsCount: 57,
-          fiveStarRatingCount: 638,
-          oneStarRatingCount: 16,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'Operating System Concepts',
-      author: ['Abraham Silberschatz', 'Peter B. Galvin', 'Greg Gagne'],
-      publisher: 'John Wiley & Sons',
-      publicationDate: '2004-12-14',
-      edition: 10,
-      keywords: [
-        'computer science',
-        'operating systems',
-        'programming',
-        'software',
-        'C',
-        'Java',
-        'engineering',
-      ],
-      pages: 921,
-      format: 'hardcover',
-      ISBN: '9780471694663',
-      language: 'English',
-      programmingLanguage: 'C, Java',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 3.9,
-          ratingsCount: 2131,
-          reviewsCount: 114,
-          fiveStarRatingCount: 728,
-          oneStarRatingCount: 65,
-        },
-      },
-    },
-    {
-      title: 'Engineering Mathematics',
-      author: ['K.A. Stroud', 'Dexter J. Booth'],
-      publisher: 'Palgrave',
-      publicationDate: '2007-01-01',
-      edition: 14,
-      keywords: ['mathematics', 'engineering'],
-      pages: 1288,
-      format: 'paperback',
-      ISBN: '9781403942463',
-      language: 'English',
-      programmingLanguage: null,
-      onlineContent: true,
-      thirdParty: {
-        goodreads: {
-          rating: 4.35,
-          ratingsCount: 370,
-          reviewsCount: 18,
-          fiveStarRatingCount: 211,
-          oneStarRatingCount: 6,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'The Personal MBA: Master the Art of Business',
-      author: 'Josh Kaufman',
-      publisher: 'Portfolio',
-      publicationDate: '2010-12-30',
-      keywords: ['business'],
-      pages: 416,
-      format: 'hardcover',
-      ISBN: '9781591843528',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.11,
-          ratingsCount: 40119,
-          reviewsCount: 1351,
-          fiveStarRatingCount: 18033,
-          oneStarRatingCount: 1090,
-        },
-      },
-    },
-    {
-      title: 'Crafting Interpreters',
-      author: 'Robert Nystrom',
-      publisher: 'Genever Benning',
-      publicationDate: '2021-07-28',
-      keywords: [
-        'computer science',
-        'compilers',
-        'engineering',
-        'interpreters',
-        'software',
-        'engineering',
-      ],
-      pages: 865,
-      format: 'paperback',
-      ISBN: '9780990582939',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.7,
-          ratingsCount: 253,
-          reviewsCount: 23,
-          fiveStarRatingCount: 193,
-          oneStarRatingCount: 0,
-        },
-      },
-    },
-    {
-      title: 'Deep Work: Rules for Focused Success in a Distracted World',
-      author: 'Cal Newport',
-      publisher: 'Grand Central Publishing',
-      publicationDate: '2016-01-05',
-      edition: 1,
-      keywords: ['work', 'focus', 'personal development', 'business'],
-      pages: 296,
-      format: 'hardcover',
-      ISBN: '9781455586691',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.19,
-          ratingsCount: 144584,
-          reviewsCount: 11598,
-          fiveStarRatingCount: 63405,
-          oneStarRatingCount: 1808,
-        },
-      },
-      highlighted: true,
-    },
-  ];
-
   const bookAuthors = [...books[0].author, ...books[1].author];
   log(bookAuthors);
 
@@ -569,14 +570,14 @@ const learnAboutRest = function () {
 
   // REST because on the LEFT side of =
   const [monster, fantome, ...others] = [1, 2, 3, 4, 5];
-  // log(monster, fantome, others); // others is now an array
+  log(monster, fantome, others); // others is now an array
 
   // Rest
   const [pizza, , risotto, ...otherFood] = [
     ...restaurant.mainMenu, // Spread
     ...restaurant.starterMenu, // Spread
   ];
-  // log(pizza, risotto, otherFood);
+  log(pizza, risotto, otherFood);
 
   // Objects
   // const { sat, ...weekdays } = restaurant.openingHours;
@@ -584,7 +585,7 @@ const learnAboutRest = function () {
   const {
     openingHours: { sat, ...weekdays },
   } = restaurant;
-  // log(sat, weekdays);
+  log(sat, weekdays);
 
   // 2) Functions
   const add = function (...numbers) {
@@ -595,10 +596,10 @@ const learnAboutRest = function () {
     log(sumOfAll);
   };
 
-  // add(1, 2, 3, 4, 5, 6, 7, 8);
+  add(1, 2, 3, 4, 5, 6, 7, 8);
 
   const x = [23, 5, 7];
-  // add(...x);
+  add(...x);
 };
 // learnAboutRest();
 
@@ -959,231 +960,6 @@ const learnAboutObjects = function () {
  */
 
 const learnSomeStuff = function () {
-  const books = [
-    {
-      title: 'Algorithms',
-      author: ['Robert Sedgewick', 'Kevin Wayne'],
-      publisher: 'Addison-Wesley Professional',
-      publicationDate: '2011-03-24',
-      edition: 4,
-      keywords: [
-        'computer science',
-        'programming',
-        'algorithms',
-        'data structures',
-        'java',
-        'math',
-        'software',
-        'engineering',
-      ],
-      pages: 976,
-      format: 'hardcover',
-      ISBN: '9780321573513',
-      language: 'English',
-      programmingLanguage: 'Java',
-      onlineContent: true,
-      year: 2011,
-      thirdParty: {
-        goodreads: {
-          rating: 4.41,
-          ratingsCount: 1733,
-          reviewsCount: 63,
-          fiveStarRatingCount: 976,
-          oneStarRatingCount: 13,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'Structure and Interpretation of Computer Programs',
-      author: [
-        'Harold Abelson',
-        'Gerald Jay Sussman',
-        'Julie Sussman (Contributor)',
-      ],
-      publisher: 'The MIT Press',
-      publicationDate: '2022-04-12',
-      edition: 2,
-      keywords: [
-        'computer science',
-        'programming',
-        'javascript',
-        'software',
-        'engineering',
-      ],
-      pages: 640,
-      format: 'paperback',
-      ISBN: '9780262543231',
-      language: 'English',
-      programmingLanguage: 'JavaScript',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.36,
-          ratingsCount: 14,
-          reviewsCount: 3,
-          fiveStarRatingCount: 8,
-          oneStarRatingCount: 0,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: "Computer Systems: A Programmer's Perspective",
-      author: ['Randal E. Bryant', "David Richard O'Hallaron"],
-      publisher: 'Prentice Hall',
-      publicationDate: '2002-01-01',
-      edition: 1,
-      keywords: [
-        'computer science',
-        'computer systems',
-        'programming',
-        'software',
-        'C',
-        'engineering',
-      ],
-      pages: 978,
-      format: 'hardcover',
-      ISBN: '9780130340740',
-      language: 'English',
-      programmingLanguage: 'C',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.44,
-          ratingsCount: 1010,
-          reviewsCount: 57,
-          fiveStarRatingCount: 638,
-          oneStarRatingCount: 16,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'Operating System Concepts',
-      author: ['Abraham Silberschatz', 'Peter B. Galvin', 'Greg Gagne'],
-      publisher: 'John Wiley & Sons',
-      publicationDate: '2004-12-14',
-      edition: 10,
-      keywords: [
-        'computer science',
-        'operating systems',
-        'programming',
-        'software',
-        'C',
-        'Java',
-        'engineering',
-      ],
-      pages: 921,
-      format: 'hardcover',
-      ISBN: '9780471694663',
-      language: 'English',
-      programmingLanguage: 'C, Java',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 3.9,
-          ratingsCount: 2131,
-          reviewsCount: 114,
-          fiveStarRatingCount: 728,
-          oneStarRatingCount: 65,
-        },
-      },
-    },
-    {
-      title: 'Engineering Mathematics',
-      author: ['K.A. Stroud', 'Dexter J. Booth'],
-      publisher: 'Palgrave',
-      publicationDate: '2007-01-01',
-      edition: 14,
-      keywords: ['mathematics', 'engineering'],
-      pages: 1288,
-      format: 'paperback',
-      ISBN: '9781403942463',
-      language: 'English',
-      programmingLanguage: null,
-      onlineContent: true,
-      thirdParty: {
-        goodreads: {
-          rating: 4.35,
-          ratingsCount: 370,
-          reviewsCount: 18,
-          fiveStarRatingCount: 211,
-          oneStarRatingCount: 6,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'The Personal MBA: Master the Art of Business',
-      author: 'Josh Kaufman',
-      publisher: 'Portfolio',
-      publicationDate: '2010-12-30',
-      keywords: ['business'],
-      pages: 416,
-      format: 'hardcover',
-      ISBN: '9781591843528',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.11,
-          ratingsCount: 40119,
-          reviewsCount: 1351,
-          fiveStarRatingCount: 18033,
-          oneStarRatingCount: 1090,
-        },
-      },
-    },
-    {
-      title: 'Crafting Interpreters',
-      author: 'Robert Nystrom',
-      publisher: 'Genever Benning',
-      publicationDate: '2021-07-28',
-      keywords: [
-        'computer science',
-        'compilers',
-        'engineering',
-        'interpreters',
-        'software',
-        'engineering',
-      ],
-      pages: 865,
-      format: 'paperback',
-      ISBN: '9780990582939',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.7,
-          ratingsCount: 253,
-          reviewsCount: 23,
-          fiveStarRatingCount: 193,
-          oneStarRatingCount: 0,
-        },
-      },
-    },
-    {
-      title: 'Deep Work: Rules for Focused Success in a Distracted World',
-      author: 'Cal Newport',
-      publisher: 'Grand Central Publishing',
-      publicationDate: '2016-01-05',
-      edition: 1,
-      keywords: ['work', 'focus', 'personal development', 'business'],
-      pages: 296,
-      format: 'hardcover',
-      ISBN: '9781455586691',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.19,
-          ratingsCount: 144584,
-          reviewsCount: 11598,
-          fiveStarRatingCount: 63405,
-          oneStarRatingCount: 1808,
-        },
-      },
-      highlighted: true,
-    },
-  ];
   const menu1 = [...restaurant.starterMenu, ...restaurant.mainMenu];
 
   // for (const item of menu1) log(item);
@@ -1192,15 +968,15 @@ const learnSomeStuff = function () {
   //   log(`${item[0] + 1}: ${item[1]}`);
   // }
   for (const [item, food] of menu1.entries()) {
-    // log(`${item + 1}: ${food}`);
+    log(`${item + 1}: ${food}`);
   }
-  // log([...menu1.entries()]);
+  log([...menu1.entries()]);
 
   let pageSum = 0;
   for (const { pages } of books) {
     pageSum += pages;
   }
-  // log(pageSum);
+  log(pageSum);
 
   const allAuthors = [];
   const collectAuthors = function (bookArray) {
@@ -1208,7 +984,7 @@ const learnSomeStuff = function () {
       if (typeof author === 'object') allAuthors.push(...author);
       else if (typeof author === 'string') allAuthors.push(author);
     }
-    // log(allAuthors);
+    log(allAuthors);
   };
   collectAuthors(books);
 
@@ -1217,7 +993,7 @@ const learnSomeStuff = function () {
       log(`${place + 1}: ${author}`);
     }
   };
-  // printAuthors(books);
+  printAuthors(books);
 
   const bookData = [
     ['title', 'Computer Networking: A Top-Down Approach'],
@@ -1240,7 +1016,7 @@ const learnSomeStuff = function () {
     author: ['Brian W. Kernighan', 'Dennis M. Ritchie'],
     pages,
   };
-  // log(newBook2);
+  log(newBook2);
 
   const maite = {
     names: {
@@ -1260,7 +1036,7 @@ const learnSomeStuff = function () {
   const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   for (const day of days) {
     const open = restaurant.openingHours[day]?.open ?? 'closed';
-    // log(`On ${day}, we open at ${open}`);
+    log(`On ${day}, we open at ${open}`);
   }
 
   const users = [{ name: 'Xavier', email: 'abc@gmail.com' }];
@@ -1271,27 +1047,27 @@ const learnSomeStuff = function () {
   const getFirstKeyword = function (bookObject) {
     log(bookObject?.keywords?.[0]);
   };
-  // getFirstKeyword(books[0]);
-  // getFirstKeyword(newBook2);
+  getFirstKeyword(books[0]);
+  getFirstKeyword(newBook2);
 
   const properties = Object.keys(openingHours);
-  // log(properties);
+  log(properties);
 
   let openStr = `We are open of ${properties.length} days: `;
   for (const day of Object.keys(openingHours)) {
     openStr += ` ${day}, `;
   }
-  // log(openStr);
+  log(openStr);
 
   const values = Object.values(openingHours);
-  // log(values);
+  log(values);
 
   const entries1 = Object.entries(openingHours);
-  // log(entries1);
+  log(entries1);
 
-  // for (const [key, { open, close }] of entries1) {
-  //   log(`On ${key} we open at ${open} and close at ${close}`);
-  // }
+  for (const [key, { open, close }] of entries1) {
+    log(`On ${key} we open at ${open} and close at ${close}`);
+  }
 
   const entries = [];
   const loopOverBook = function (book) {
@@ -1300,22 +1076,23 @@ const learnSomeStuff = function () {
     }
   };
   loopOverBook(books[0]);
-  // log(entries);
+  log(entries);
 
   const makeAnArray = function (book) {
     for (const [index, value] of Object.values(
       book.thirdParty.goodreads
     ).entries()) {
-      // log(index, value);
+      log(index, value);
       entries[index].push(value);
     }
   };
   makeAnArray(books[0]);
-  // log(entries);
+  log(entries);
 
   const entries2 = Object.entries(books[0].thirdParty.goodreads);
-  // log(entries2);
+  log(entries2);
 };
+// learnSomeStuff();
 
 /*
  *
@@ -1499,42 +1276,6 @@ const myHomeworkMaps = function () {
     )} pages.`
   );
 
-  const books = [
-    {
-      title: 'Algorithms',
-      author: ['Robert Sedgewick', 'Kevin Wayne'],
-      publisher: 'Addison-Wesley Professional',
-      publicationDate: '2011-03-24',
-      edition: 4,
-      keywords: [
-        'computer science',
-        'programming',
-        'algorithms',
-        'data structures',
-        'java',
-        'math',
-        'software',
-        'engineering',
-      ],
-      pages: 976,
-      format: 'hardcover',
-      ISBN: '9780321573513',
-      language: 'English',
-      programmingLanguage: 'Java',
-      onlineContent: true,
-      year: 2011,
-      thirdParty: {
-        goodreads: {
-          rating: 4.41,
-          ratingsCount: 1733,
-          reviewsCount: 63,
-          fiveStarRatingCount: 976,
-          oneStarRatingCount: 13,
-        },
-      },
-      highlighted: true,
-    },
-  ];
   const firstBookMap = new Map(Object.entries(books[0]));
   log(firstBookMap);
   for (const [key, value] of firstBookMap) {
@@ -1726,231 +1467,6 @@ const learningAboutStrings = function () {
 // learningAboutStrings();
 
 const myHomeworkStrings = function () {
-  const books = [
-    {
-      title: 'Algorithms',
-      author: ['Robert Sedgewick', 'Kevin Wayne'],
-      publisher: 'Addison-Wesley Professional',
-      publicationDate: '2011-03-24',
-      edition: 4,
-      keywords: [
-        'computer science',
-        'programming',
-        'algorithms',
-        'data structures',
-        'java',
-        'math',
-        'software',
-        'engineering',
-      ],
-      pages: 976,
-      format: 'hardcover',
-      ISBN: '9780321573513',
-      language: 'English',
-      programmingLanguage: 'Java',
-      onlineContent: true,
-      year: 2011,
-      thirdParty: {
-        goodreads: {
-          rating: 4.41,
-          ratingsCount: 1733,
-          reviewsCount: 63,
-          fiveStarRatingCount: 976,
-          oneStarRatingCount: 13,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'Structure and Interpretation of Computer Programs',
-      author: [
-        'Harold Abelson',
-        'Gerald Jay Sussman',
-        'Julie Sussman (Contributor)',
-      ],
-      publisher: 'The MIT Press',
-      publicationDate: '2022-04-12',
-      edition: 2,
-      keywords: [
-        'computer science',
-        'programming',
-        'javascript',
-        'software',
-        'engineering',
-      ],
-      pages: 640,
-      format: 'paperback',
-      ISBN: '9780262543231',
-      language: 'English',
-      programmingLanguage: 'JavaScript',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.36,
-          ratingsCount: 14,
-          reviewsCount: 3,
-          fiveStarRatingCount: 8,
-          oneStarRatingCount: 0,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: "Computer Systems: A Programmer's Perspective",
-      author: ['Randal E. Bryant', "David Richard O'Hallaron"],
-      publisher: 'Prentice Hall',
-      publicationDate: '2002-01-01',
-      edition: 1,
-      keywords: [
-        'computer science',
-        'computer systems',
-        'programming',
-        'software',
-        'C',
-        'engineering',
-      ],
-      pages: 978,
-      format: 'hardcover',
-      ISBN: '9780130340740',
-      language: 'English',
-      programmingLanguage: 'C',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.44,
-          ratingsCount: 1010,
-          reviewsCount: 57,
-          fiveStarRatingCount: 638,
-          oneStarRatingCount: 16,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'Operating System Concepts',
-      author: ['Abraham Silberschatz', 'Peter B. Galvin', 'Greg Gagne'],
-      publisher: 'John Wiley & Sons',
-      publicationDate: '2004-12-14',
-      edition: 10,
-      keywords: [
-        'computer science',
-        'operating systems',
-        'programming',
-        'software',
-        'C',
-        'Java',
-        'engineering',
-      ],
-      pages: 921,
-      format: 'hardcover',
-      ISBN: '9780471694663',
-      language: 'English',
-      programmingLanguage: 'C, Java',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 3.9,
-          ratingsCount: 2131,
-          reviewsCount: 114,
-          fiveStarRatingCount: 728,
-          oneStarRatingCount: 65,
-        },
-      },
-    },
-    {
-      title: 'Engineering Mathematics',
-      author: ['K.A. Stroud', 'Dexter J. Booth'],
-      publisher: 'Palgrave',
-      publicationDate: '2007-01-01',
-      edition: 14,
-      keywords: ['mathematics', 'engineering'],
-      pages: 1288,
-      format: 'paperback',
-      ISBN: '9781403942463',
-      language: 'English',
-      programmingLanguage: null,
-      onlineContent: true,
-      thirdParty: {
-        goodreads: {
-          rating: 4.35,
-          ratingsCount: 370,
-          reviewsCount: 18,
-          fiveStarRatingCount: 211,
-          oneStarRatingCount: 6,
-        },
-      },
-      highlighted: true,
-    },
-    {
-      title: 'The Personal MBA: Master the Art of Business',
-      author: 'Josh Kaufman',
-      publisher: 'Portfolio',
-      publicationDate: '2010-12-30',
-      keywords: ['business'],
-      pages: 416,
-      format: 'hardcover',
-      ISBN: '9781591843528',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.11,
-          ratingsCount: 40119,
-          reviewsCount: 1351,
-          fiveStarRatingCount: 18033,
-          oneStarRatingCount: 1090,
-        },
-      },
-    },
-    {
-      title: 'Crafting Interpreters',
-      author: 'Robert Nystrom',
-      publisher: 'Genever Benning',
-      publicationDate: '2021-07-28',
-      keywords: [
-        'computer science',
-        'compilers',
-        'engineering',
-        'interpreters',
-        'software',
-        'engineering',
-      ],
-      pages: 865,
-      format: 'paperback',
-      ISBN: '9780990582939',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.7,
-          ratingsCount: 253,
-          reviewsCount: 23,
-          fiveStarRatingCount: 193,
-          oneStarRatingCount: 0,
-        },
-      },
-    },
-    {
-      title: 'Deep Work: Rules for Focused Success in a Distracted World',
-      author: 'Cal Newport',
-      publisher: 'Grand Central Publishing',
-      publicationDate: '2016-01-05',
-      edition: 1,
-      keywords: ['work', 'focus', 'personal development', 'business'],
-      pages: 296,
-      format: 'hardcover',
-      ISBN: '9781455586691',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.19,
-          ratingsCount: 144584,
-          reviewsCount: 11598,
-          fiveStarRatingCount: 63405,
-          oneStarRatingCount: 1808,
-        },
-      },
-      highlighted: true,
-    },
-  ];
   log(books[0].ISBN[6], books[0].ISBN[4], books[0].ISBN[9], books[0].ISBN[8]);
   const quote =
     'A computer once beat me at chess, but it was no match for me at kick boxing';
@@ -2118,4 +1634,4 @@ const anotherStringExercise = function () {
     log(`${status} from ${departure} to ${arrival} ${time}`);
   }
 };
-anotherStringExercise();
+// anotherStringExercise();
