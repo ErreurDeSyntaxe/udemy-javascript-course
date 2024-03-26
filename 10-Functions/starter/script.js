@@ -1,1 +1,321 @@
 'use strict';
+const log = console.log;
+
+/*
+ *
+ * Default Parameters: How to set default values to avoid bugs
+ *
+ */
+
+const learnAboutDefaults = function () {
+  const bookings = [];
+
+  // ES6 way of dealing with missing parameters
+  const createBooking = function (
+    flightNum,
+    passCount = 1,
+    price = 199 * passCount
+  ) {
+    // ES5 way of dealing with missing parameters
+    // passCount = passCount || 1;
+    // price = price || 199;
+
+    const booking = {
+      flightNum,
+      passCount,
+      price,
+    };
+    log(booking);
+    bookings.push(booking);
+  };
+  createBooking('AC123');
+  createBooking('AC123', 2, 800);
+  createBooking('AC123', 6);
+  createBooking('AC123', undefined, 800); // A way of using the default value
+};
+// learnAboutDefaults();
+
+/*
+ *
+ * Passing Arguments: by reference vs by value
+ *
+ */
+
+const learnAboutArguments = function () {
+  const flight = 'LH234';
+  const xavier = {
+    name: 'Xavier Bertrand',
+    passport: 'HDMI3.1',
+  };
+
+  const checkIn = function (flightNum, passenger) {
+    flightNum = 'LH999'; // A copy of the original string
+    passenger.name = 'Mr. ' + passenger.name; // A reference to the original
+
+    // if (passenger.passport === 'HDMI3.1') {
+    //   alert('Checked in');
+    // } else {
+    //   alert('Wrong passport');
+    // }
+  };
+
+  checkIn(flight, xavier);
+  log(flight); // Flight number is still LH234, not LH999
+  log(xavier);
+
+  const newPassport = function (person) {
+    person.passport = Math.trunc(Math.random() * 10000000000);
+  };
+
+  newPassport(xavier); // Modifies the passport
+  checkIn(flight, xavier); // Passports don't match anymore
+};
+// learnAboutArguments();
+
+/*
+ *
+ * Functions as First Class Citizens
+ *
+ */
+
+const learnAboutFunctions = function () {
+  const oneWord = function (str) {
+    return str.replace(/ /g, '').toLowerCase();
+  };
+
+  const upperFirstWord = function (str) {
+    const [first, ...others] = str.split(' ');
+    return [first.toUpperCase(), ...others].join(' ');
+  };
+
+  // Higher-order function bc takes a function or returns a function
+  const transformer = function (str, fn) {
+    log(`Original string: ${str}`);
+    log(`Transformed string: ${fn(str)}`);
+    log(`Transformed by: ${fn.name}`);
+  };
+
+  transformer('JavaScript is the best!', upperFirstWord);
+  transformer('JavaScript is the best!', oneWord);
+
+  // JS uses callbacks all the time
+  const high5 = function () {
+    log('Hi 5!');
+  };
+  document.body.addEventListener('click', high5);
+
+  /*
+   *
+   * Functions Returning Functions
+   *
+   */
+  const greet = function (greeting) {
+    return function (name) {
+      log(`${greeting} ${name}`);
+    };
+  };
+  const greeterHey = greet('Hey');
+
+  greeterHey('Xavier');
+  greeterHey('Jeanne');
+  greet('Hello')('Maïté');
+
+  const greetArrow = greeting => {
+    return name => {
+      log(`${greeting} ${name}`);
+    };
+  };
+  const greeterArrowHey = greetArrow('Hey');
+
+  greeterArrowHey('Papi Marc');
+};
+// learnAboutFunctions();
+
+/*
+ *
+ * Functions: Using the THIS keyword
+ *
+ */
+const learnAboutCallApplyBind = function () {
+  // First Airline
+  const lufthansa = {
+    airline: 'Lufthansa',
+    iataCode: 'LH',
+    bookings: [],
+    book(flightNum, passName) {
+      this.bookings.push({ flight: `${this.iataCode}${flightNum}`, passName });
+      log(
+        `${passName} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+      );
+    },
+  };
+  // Bookings for first airline
+  lufthansa.book(239, 'Xavier Bertrand');
+  lufthansa.book(356, 'Marc Bertrand');
+  log(lufthansa);
+
+  // Second Airline
+  const eurowings = {
+    airline: 'Eurowings',
+    iataCode: 'EW',
+    bookings: [],
+  };
+
+  /*
+   *
+   * Using the call Method: myObject.call(THIS, PARAM1, PARAM2...)
+   *
+   */
+
+  // Copy the function from a pre-existing object
+  // I expect the booking will be made for the First Airline
+  // I was wrong. It crashes (undefined) because book is a function without a
+  // this
+  // const book = lufthansa.book;
+  // book(23, 'Jeanne Bertrand');
+
+  const book = lufthansa.book;
+  // Call sets the object as the first argument
+  book.call(eurowings, 23, 'Jeanne Bertrand');
+  log(eurowings);
+
+  book.call(lufthansa, 239, 'Mamie Jo');
+  log(lufthansa);
+
+  const swiss = {
+    airline: 'Swiss Air Lines',
+    iataCode: 'LX',
+    bookings: [],
+  };
+  book.call(swiss, 1234, 'Mamie Thalie');
+  log(swiss);
+
+  /*
+   *
+   * Using the apply Method: myObject.apply(THIS, PARAMarray)
+   *
+   */
+  const flightData = [583, 'George Cooper'];
+  book.apply(swiss, flightData); // Not common anymore
+  book.call(swiss, ...flightData); // Just spread the array
+  log(swiss);
+
+  /*
+   *
+   * Using the bind Method: Doesn't call function, Returns function
+   *
+   */
+
+  // This functions's this will always be the same object
+  const bookLH = book.bind(lufthansa);
+  const bookLX = book.bind(swiss);
+  const bookEW = book.bind(eurowings);
+  bookEW(23, 'Steven Williams');
+  log(eurowings);
+
+  // Partial Application: Some of the values are predefined
+  const bookEW23 = book.bind(eurowings, 23);
+  bookEW23('Papi Marc');
+  log(eurowings);
+
+  // With Event Listeners
+  lufthansa.planes = 300;
+  lufthansa.buyPlane = function () {
+    this.planes++;
+    log(this.planes);
+  };
+  // document
+  //   .querySelector('.buy')
+  //   .addEventListener('click', () => lufthansa.buyPlane());
+  // Without an arrow function, this === buyButton
+  // The arrow function lets this === lufthansa
+
+  document
+    .querySelector('.buy')
+    .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+
+  // Partial Application: presetting parameters
+  const addTax = (rate, value) => value + value * rate;
+  log(addTax(0.1, 200));
+
+  // Use null when the THIS doesn't matter
+  const addVAT = addTax.bind(null, 0.23);
+  log(addVAT(100));
+
+  const addTaxes = function (rate) {
+    return function (subtotal) {
+      return subtotal + subtotal * rate;
+    };
+  };
+  const add15 = addTaxes(0.15);
+  log(add15(300));
+};
+// learnAboutCallApplyBind();
+
+/*
+ *
+ * Coding Challenge #1
+ *
+ */
+const codingChallenge1 = function () {
+  log('Coding Challenge 1 Starts Now!');
+
+  // Test DATA 1: [5, 2, 3]
+  const data1 = {
+    answers: [5, 2, 3],
+  };
+  // Test DATA 2: [1, 5, 3, 9, 6, 1]
+  const data2 = {
+    answers: [1, 5, 3, 9, 6, 1],
+  };
+
+  /// The question and possible answers
+  const poll = {
+    question: 'What is your favorite programming language?',
+    options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+    // Following line to be explained in other section
+    answers: new Array(4).fill(0),
+    registerNewAnswer() {
+      const answer = prompt(
+        `${this.question}\n${this.options.join('\n')}\n(Write option number)`
+      );
+      if (answer >= 0 && answer <= 3) this.answers[answer]++;
+      else {
+        log('Invalid answer');
+      }
+      this.displayResults();
+    },
+    displayResults(type = 'string') {
+      if (type === 'string') {
+        log(`The results are ${this.answers.join(', ')}`);
+      } else if (type === 'array') {
+        log(this.answers);
+      }
+    },
+  };
+
+  document
+    .querySelector('.poll')
+    .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+  const displayAny = poll.displayResults;
+  displayAny.call(data1);
+  displayAny.apply(data2);
+
+  const displayData2 = poll.displayResults.bind(data2);
+  displayData2();
+
+  poll.displayResults.call(data1, 'string');
+  poll.displayResults.apply(data2, ['array']);
+};
+// codingChallenge1();
+
+/*
+ *
+ * Functions: Immediately Invoked Function Expressions
+ *
+ */
+const learnAboutIIFE = function () {
+  log('Immediately Invoked Function Expressions');
+};
+learnAboutIIFE();
