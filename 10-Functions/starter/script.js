@@ -317,5 +317,121 @@ const codingChallenge1 = function () {
  */
 const learnAboutIIFE = function () {
   log('Immediately Invoked Function Expressions');
+
+  const runOnce = function () {
+    log('This function can actually be called twice...');
+  };
+  runOnce();
+  runOnce();
+
+  // Wrap the whole function in parentheses, then add ();
+  (function () {
+    log('This will never run again.');
+    const isPrivate = 23;
+    var isItPrivate = 23;
+  })();
+
+  (() => log('Arrow functions can also be IIFEs'))();
+  // IIFEs have the advantage of a scope that cannot be accessed again.
+  // log(isPrivate); // ReferenceError: is not defined
+  // log(isItPrivate); // ReferenceError: is not defined
 };
-learnAboutIIFE();
+// learnAboutIIFE();
+
+/*
+ *
+ * Functions: Closures
+ *
+ *
+ */
+const learnAboutClosures = function () {
+  log('Closures in JavaScript');
+
+  /*
+   * Example 1
+   */
+  const secureBooking = function () {
+    let passengerCount = 0;
+
+    return function () {
+      passengerCount++;
+      log(`${passengerCount} passengers`);
+    };
+  };
+
+  const booker = secureBooking();
+  booker(); // passengerCount === 1
+  booker(); // passengerCount === 2
+  booker(); // passengerCount === 3
+
+  // A closure makes a function remember all the variables that existed
+  // at the function's birthplace even after the parent function has returned
+  console.dir(booker);
+
+  /*
+   * Example 2
+   */
+  let f;
+  const g = function () {
+    const a = 23;
+    f = function () {
+      log(a * 2);
+    };
+  };
+
+  const h = function () {
+    const b = 777;
+    f = function () {
+      log(b * 2);
+    };
+  };
+
+  g(); // reassigns f from 'undefined' to a function
+  f();
+  console.dir(f);
+  h(); // reassigns f AGAIN
+  f();
+  console.dir(f);
+
+  /*
+   * Example 3
+   */
+  const boardPassengers = function (n, wait) {
+    const perGroup = n / 3;
+
+    // Creating a closure
+    setTimeout(function () {
+      log(`We are now boarding all ${n} passengers`);
+      log(`There are 3 groups, each with ${perGroup} passengers`);
+    }, wait * 1000);
+
+    log(`Will start boarding in ${wait} seconds`);
+  };
+
+  const perGroup = 1000;
+  // The closure has priority over other scopes. The proof is this variable
+  // also called perGroup. Its value is not reached because JS finds a value
+  // for perGroup in the closure. Therefore JS doesn't need to look further
+  boardPassengers(180, 3);
+};
+// learnAboutClosures();
+
+/*
+ *
+ * Coding Challenge #2
+ *
+ */
+const codingChallenge2 = function () {
+  log('Coding Challenge #2 Starts here');
+  (function () {
+    const header = document.querySelector('h1');
+    header.style.color = 'red';
+    document.querySelector('body').addEventListener('click', () => {
+      header.style.color = 'blue';
+    });
+  })();
+
+  // Objective: Attach an event listener that changes the header color to blue
+  // Objective: Explain to yourself why this works
+};
+// codingChallenge2();
