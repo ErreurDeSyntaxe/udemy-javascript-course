@@ -1,4 +1,5 @@
 'use strict';
+const log = console.log;
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -73,4 +74,105 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-/////////////////////////////////////////////////
+const learnAboutMapsAndsSets = function () {
+  currencies.forEach(function (value, key, map) {
+    log(`${key}: ${value}`);
+    log(map);
+  });
+
+  const currenciesUnique = new Set(['USD', 'GBP', 'EUR']);
+  currenciesUnique.forEach(function (value, _, set) {
+    log(`${value}: ${_}`); // An underscore is sometimes understood as a throwaway
+    log(set);
+    // A set doesn't have keys, but in order to keep all forEach methods the same
+    // JS decided to keep the key argument in the Set method.
+  });
+};
+// learnAboutMapsAndsSets();
+
+const learnAboutForEach = function () {
+  const usingForOf = function () {
+    for (const [index, movement] of movements.entries()) {
+      if (movement > 0) {
+        log(`Transaction ${index + 1}: You deposited $${movement}`);
+      } else {
+        log(`Transaction ${index + 1}: You withdrew $${Math.abs(movement)}`);
+      }
+    }
+  };
+  usingForOf();
+
+  log('----- FOREACH -----');
+  const usingForEach = function () {
+    // Loops over the array. At each iteration, forEach passes three arguments:
+    // the current element, the index of the element, and the whole array
+    movements.forEach(function (movement, index, array) {
+      // The anonymous function is a callback function
+      log(
+        movements > 0
+          ? `Transaction ${index + 1}You deposited $${movement}`
+          : `Transaction ${index + 1}You withdrew $${Math.abs(movement)}`
+      );
+    });
+  };
+  usingForEach();
+};
+// learnAboutForEach();
+
+const learnBasicMethods = function () {
+  const anArray = ['a', 'b', 'c', 'd', 'e'];
+
+  /*
+   * Slice: returns a new array, does NOT modify the original array
+   */
+  log(anArray.slice(2)); // returns a new array ['c', 'd', 'e']
+  log(anArray.slice(2, 4)); // returns 2 to 3 ['c', 'd']
+  log(anArray.slice(-1)); // ['e']
+  log(anArray.slice(-2)); // ['d', 'e']
+  log(anArray.slice()); // shallow copy of the entire array
+  log([...anArray]); // shallow copy of the entire array
+
+  /*
+   * Splice: mutates the array
+   */
+  log(anArray.splice(2)); // from 2 to the end
+  log(anArray); // contains 0 and 1. 2, 3, 4 are gone
+  log(anArray.splice(-1)); // took out the last element of the array
+  log(anArray); // contains only 0
+  anArray.push('b', 'c', 'd', 'e'); // back to the original content
+  anArray.splice(1, 2); // from position 1 remove 2 elements
+  log(anArray); // contains 0, 3, 4
+
+  /*
+   * Reverse: Mutates the original array & Returns the reversed array
+   */
+  const anotherArray = ['j', 'i', 'h', 'g', 'f'];
+  log(anotherArray.reverse());
+  log(anotherArray); // 'f', 'g', 'h',...
+
+  /*
+   * Concat: Returns a merged array
+   */
+  log(anotherArray.concat('Xavier'));
+  log(anotherArray); // Original array NOT mutated
+  log([...anArray, ...anotherArray]); // same as anArray.concat(anotherArray);
+
+  /*
+   * Join: Returns a string of all array items joined by a specified char
+   */
+  log(anotherArray.join('-'));
+  log(anotherArray); // Not modified
+
+  /*
+   * At: A replacement for the bracket notation (also works on strings)
+   */
+  const aNewArray = [23, 11, 17];
+  log(aNewArray.at(0));
+  log(aNewArray[0]);
+  // Getting the last element of the array w/o knowing the length
+  log(aNewArray[aNewArray.length - 1]); // last element
+  log(aNewArray.slice(-1)[0]); // first (and only) element return by slice
+  log(aNewArray.at(-1)); // last element, like slice and splice
+  log('Xavier'.at(0));
+};
+// learnBasicMethods();
