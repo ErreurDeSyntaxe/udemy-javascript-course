@@ -62,6 +62,28 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+/*
+ *
+ * Simple DOM Manipulation
+ *
+ */
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
+  // Not the same as containerMovements.textContent
+
+  movements.forEach(function (movement, i) {
+    const type = movement > 0 ? 'deposit' : 'withdrawal';
+    const html = `
+    <div class="movements__row">
+    <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+    <div class="movements__value">${movement}</div>
+    </div>`;
+
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+displayMovements(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -74,6 +96,11 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
+/*
+ *
+ * forEach Used on Maps and Sets
+ *
+ */
 const learnAboutMapsAndsSets = function () {
   currencies.forEach(function (value, key, map) {
     log(`${key}: ${value}`);
@@ -90,6 +117,11 @@ const learnAboutMapsAndsSets = function () {
 };
 // learnAboutMapsAndsSets();
 
+/*
+ *
+ * forEach Used on Arrays
+ *
+ */
 const learnAboutForEach = function () {
   const usingForOf = function () {
     for (const [index, movement] of movements.entries()) {
@@ -119,6 +151,11 @@ const learnAboutForEach = function () {
 };
 // learnAboutForEach();
 
+/*
+ *
+ * Basic Array Methods: Slice, Splice, Reverse, Join, At
+ *
+ */
 const learnBasicMethods = function () {
   const anArray = ['a', 'b', 'c', 'd', 'e'];
 
@@ -176,3 +213,49 @@ const learnBasicMethods = function () {
   log('Xavier'.at(0));
 };
 // learnBasicMethods();
+
+/*
+ *
+ * Coding Challenge #1
+ *
+ */
+const codingChallenge1 = function () {
+  /*
+   * test data
+   */
+  const julia1 = [3, 5, 2, 12, 7];
+  const kate1 = [4, 1, 15, 8, 3];
+  const julia2 = [9, 16, 6, 8, 3];
+  const kate2 = [10, 5, 6, 1, 4];
+  /*
+   * test data
+   */
+  const checkDogs = function (dogsJulia, dogsKate) {
+    const dogs = [...dogsJulia.slice(1, -2), ...dogsKate];
+    dogs.forEach(function (age, index) {
+      const verdict =
+        age >= 3 ? `an adult and is ${age} years old` : 'still a puppy 🐶';
+      log(`Dog number ${index + 1} is ${verdict}`);
+    });
+  };
+  log('------------ FIRST TEST ------------');
+  checkDogs(julia1, kate1);
+  log('------------ SECOND TEST ------------');
+  checkDogs(julia2, kate2);
+};
+// codingChallenge1();
+
+/*
+ *
+ * Powerful Array Methods: Map, Filter, Reduce
+ *
+ */
+const dataTransformation = function () {
+  const mapMethod = function () {};
+  mapMethod();
+  const filterMethod = function () {};
+  filterMethod();
+  const reduceMethod = function () {};
+  reduceMethod();
+};
+dataTransformation();
