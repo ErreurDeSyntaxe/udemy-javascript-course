@@ -1,86 +1,223 @@
 'use strict';
+const log = console.log;
 
-///////////////////////////////////////
-// Modal window
+const activateModal = function () {
+  const modal = document.querySelector('.modal');
+  const overlay = document.querySelector('.overlay');
+  const btnCloseModal = document.querySelector('.btn--close-modal');
+  const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
-const modal = document.querySelector('.modal');
-const overlay = document.querySelector('.overlay');
-const btnCloseModal = document.querySelector('.btn--close-modal');
-const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+  const openModal = function (e) {
+    e.preventDefault();
+    modal.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  };
 
-const openModal = function (e) {
-  e.preventDefault();
-  modal.classList.remove('hidden');
-  overlay.classList.remove('hidden');
+  const closeModal = function () {
+    modal.classList.add('hidden');
+    overlay.classList.add('hidden');
+  };
+
+  // for (let i = 0; i < btnsOpenModal.length; i++) {
+  //   btnsOpenModal[i].addEventListener('click', openModal);
+  // }
+  btnsOpenModal.forEach(btn => {
+    btn.addEventListener('click', openModal);
+  });
+
+  btnCloseModal.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
 };
+activateModal();
 
-const closeModal = function () {
-  modal.classList.add('hidden');
-  overlay.classList.add('hidden');
+const learnAboutScrolling = function () {
+  const btnScrollTo = document.querySelector('.btn--scroll-to');
+  const section1 = document.querySelector('#section--1');
+  btnScrollTo.addEventListener('click', e => {
+    const s1coords = section1.getBoundingClientRect();
+    // log(s1coords);
+    // log(e.target.getBoundingClientRect());
+
+    // log('Current scroll (x/y)', window.pageXOffset, window.pageYOffset);
+    // log('Current scroll (x/y)', window.scrollX, window.scrollY);
+    // log(
+    //   'height/width viewport',
+    //   document.documentElement.clientHeight,
+    //   document.documentElement.clientWidth
+    // );
+
+    // Scrolling 1
+    // window.scrollTo(
+    //   s1coords.left + window.scrollX,
+    //   s1coords.top + window.scrollY
+    // );
+
+    // Scrolling 2
+    // window.scrollTo({
+    //   left: s1coords.left + window.scrollX,
+    //   top: s1coords.top + window.scrollY,
+    //   behavior: 'smooth',
+    // });
+
+    // Scrolling 3
+    section1.scrollIntoView({ behavior: 'smooth' });
+  });
 };
+// learnAboutScrolling();
 
-btnsOpenModal.forEach(btn => {
-  btn.addEventListener('click', openModal);
-});
+const learnAboutEvents = function () {
+  const h1 = document.querySelector('h1');
+  // creating named function cuz anonymous func cant be removed
+  const alertH1 = function (e) {
+    alert('addEventListener: Great! You are reading the heading :D');
+  };
 
-btnCloseModal.addEventListener('click', closeModal);
-overlay.addEventListener('click', closeModal);
+  h1.addEventListener('mouseenter', alertH1);
+  setTimeout(() => {
+    h1.removeEventListener('mouseenter', alertH1);
+  }, 3000); // wait three seconds after loading
 
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-    closeModal();
-  }
-});
+  // old school way of handling events
+  h1.onmouseenter = e => {
+    alert('OnMouseEnter');
+  };
+
+  const randomInt = (min, max) =>
+    Math.floor(Math.random() * (max - min + 1) + min);
+  const randomColor = () =>
+    `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+  document.querySelector('.nav__link').addEventListener('click', function (e) {
+    this.style.backgroundColor = randomColor();
+    log('Link\n', e.target, e.currentTarget);
+    // stop event propagation
+    // e.stopPropagation();
+  });
+  document.querySelector('.nav__links').addEventListener('click', function (e) {
+    this.style.backgroundColor = randomColor();
+    log('Container\n', e.target, e.currentTarget);
+  });
+  document.querySelector('.nav').addEventListener(
+    'click',
+    function (e) {
+      this.style.backgroundColor = randomColor();
+      log('Navigation\n', e.target, e.currentTarget);
+    },
+    true
+  );
+};
+learnAboutEvents();
+
+const learnAboutDelegation = function () {
+  // METHOD 1: ADD EVENT LISTENER TO EACH LINK: CREATES USELESS COPIES
+  // document.querySelectorAll('.nav__link').forEach(function (el) {
+  //   el.addEventListener('click', function (e) {
+  //     e.preventDefault();
+  //     const id = this.getAttribute('href');
+  //     log(id);
+  //     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  //   });
+  // });
+
+  // METHOD 2: ADD EVENT LISTENER TO PARENT ELEMENT (EVENT DELEGATION)
+  // step 1: add event listener
+  // step 2: determine which element cause the event
+  document.querySelector('.nav__links').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (e.target.classList.contains('nav__link')) {
+      const id = e.target.getAttribute('href');
+      document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+};
+learnAboutDelegation();
 
 // SELECTING ELEMENTS
-// console.log(document.documentElement);
-// console.log(document.head);
-// console.log(document.body);
+const learnAboutSelecting = function () {
+  log(document.documentElement); // outputs the whole document
+  log(document.head);
+  log(document.body);
 
-const header = document.querySelector('.header');
-// const allSections = document.querySelectorAll('.section');
-// console.log(allSections);
-// console.log(document.getElementsByTagName('button'));
-// console.log(document.getElementsByClassName('btn'));
+  const header = document.querySelector('.header');
+  const allSections = document.querySelectorAll('.section');
+  const tagName = document.getElementsByTagName('button');
+  const className = document.getElementsByClassName('btn');
+
+  log(header); // an element
+  log(allSections); // NodeList
+  log(tagName); // HTML live collection
+  log(className); // HTML live collection
+};
+// learnAboutSelecting();
 
 // CREATING AND INSERTING ELEMENTS
-const message = document.createElement('div');
-message.classList.add('cookie-message');
-// message.textContent =
-//   'We use cookies for improved functionality and analytics.';
-message.innerHTML =
-  'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
-header.prepend(message);
-header.append(message); // element itself can only exist once. It's moved
-// header.append(message.cloneNode(true));
+const learnAboutInsertingDeleting = function () {
+  // .insertAdjacentHTML is cool, but there's better (?)
 
-header.before(message);
+  const header = document.querySelector('.header');
+  const message = document.createElement('div');
+  message.classList.add('cookie-message');
+  message.innerHTML =
+    'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
+  header.prepend(message);
+  header.append(message); // element was not copied and added. was moved.
+  // header.append(message.cloneNode(true)); // element was copied
+  header.before(message); // OG element was moved
 
-// DELETING ELEMENTS
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', () => message.remove());
+  // DELETING ELEMENTS
+  const learnAboutDeleting = function () {
+    document
+      .querySelector('.btn--close-cookie')
+      .addEventListener('click', () => message.remove());
+    // message.parentElement.removeChild(message); // same thing
+  };
+  learnAboutDeleting();
+};
+// learnAboutInsertingDeleting();
 
 // STYLING ELEMENTS
-message.style.backgroundColor = '#37383d';
-message.style.width = '120%';
+const learnAboutStyling = function () {
+  const message = document.querySelector('.cookie-message');
+  message.style.backgroundColor = '#37383d';
+  message.style.width = '120%'; // include the unit
 
-// console.log(message.style.width); // can read only if we wrote it inline
-console.log(getComputedStyle(message).width);
+  log(message.style.height); // can read only if we wrote it inline
+  log(getComputedStyle(message).height); // can read everything
 
-message.style.height =
-  Number.parseFloat(getComputedStyle(message).height, 10) + 40 + 'px';
+  message.style.height =
+    Number.parseFloat(getComputedStyle(message).height, 10) + 40 + 'px';
 
-document.documentElement.style.setProperty('--color-primary', 'orangered');
+  // CSS variables are located on the ::root AKA document.documentElement
+  document.documentElement.style.setProperty('--color-primary', 'orangered');
 
-const logo = document.querySelector('.nav__logo');
-console.log(logo.alt);
-logo.alt += '. Beautiful, init?';
-console.log(logo.alt);
-console.log(logo.src);
-console.log(logo.getAttribute('src'));
-console.log(logo.getAttribute('designer'));
-logo.setAttribute('company', 'Bankist');
-console.log(logo);
+  // Read Attributes
+  const logo = document.querySelector('.nav__logo');
+  const link = document.querySelector('.nav__link--btn');
+  logo.alt += '. Beautiful, init?';
+  log('Logo Alt Text', logo.alt);
+  log('Logo Src (dot notation)', logo.src);
+  log('Logo Src (getAttribute)', logo.getAttribute('src'));
+  log('Logo Designer (dot)', logo.designer); // JS cant find cuz non-standard
+  log('Logo Designer (get)', logo.getAttribute('designer'));
+  log('Link href (dot)', link.href);
+  log('Link href (get)', link.getAttribute('href'));
+  // Data Attributes
+  log('Logo Data Attribute', logo.dataset.versionNumber); // 'data-' 開頭的attributes
 
-console.log(logo.dataset.versionNumber);
+  // Write Attributes
+  logo.setAttribute('company', 'Bankist');
+  log(logo);
+
+  // Classes
+  logo.classList.add('xavier', 'bertrand');
+  logo.classList.remove('xavier');
+  logo.classList.toggle('vacation');
+  logo.classList.contains('something');
+};
+// learnAboutStyling();
