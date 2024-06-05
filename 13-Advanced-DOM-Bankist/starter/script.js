@@ -1,6 +1,44 @@
 'use strict';
 const log = console.log;
 
+/*
+ *
+ * Navigation Fade Animation: Upon hover, fade other nav elements
+ *
+ */
+const activateMenuFade = function () {
+  const nav = document.querySelector('.nav');
+  const handleHover = function (e) {
+    if (e.target.classList.contains('nav__link')) {
+      const link = e.target;
+      const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+      const logo = link.closest('.nav').querySelector('img');
+
+      siblings.forEach(el => {
+        if (el !== link) el.style.opacity = this;
+      });
+      logo.style.opacity = this;
+    }
+  };
+  // nav.addEventListener('mouseover', handleHover); // doesn't work, no args
+  // nav.addEventListener('mouseover', function (e) { // works but is ugly
+  //   handleHover(e, 0.5);
+  // });
+  // nav.addEventListener('mouseout', function (e) {
+  //   handleHover(e, 1);
+  // });
+
+  // passing an "argument" into a handler function
+  nav.addEventListener('mouseover', handleHover.bind(0.5));
+  nav.addEventListener('mouseout', handleHover.bind(1));
+};
+activateMenuFade();
+
+/*
+ *
+ * Tab Component: Finding the elements and applying/removing styles
+ *
+ */
 const activateTabComponent = function () {
   const tabs = document.querySelectorAll('.operations__tab');
   const tabsContainer = document.querySelector('.operations__tab-container');
@@ -29,6 +67,11 @@ const activateTabComponent = function () {
 };
 activateTabComponent();
 
+/*
+ *
+ * Modal Window: Opening and Closing the modal (buttons and escape key)
+ *
+ */
 const activateModal = function () {
   const modal = document.querySelector('.modal');
   const overlay = document.querySelector('.overlay');
@@ -64,6 +107,11 @@ const activateModal = function () {
 };
 activateModal();
 
+/*
+ *
+ * Smooth Scrolling: Old School & Modern Approches
+ *
+ */
 const learnAboutScrolling = function () {
   const btnScrollTo = document.querySelector('.btn--scroll-to');
   const section1 = document.querySelector('#section--1');
@@ -99,6 +147,11 @@ const learnAboutScrolling = function () {
 };
 // learnAboutScrolling();
 
+/*
+ *
+ * Events & Handlers: Different ways of handling events
+ *
+ */
 const learnAboutEvents = function () {
   const h1 = document.querySelector('h1');
   // creating named function cuz anonymous func cant be removed
@@ -141,6 +194,11 @@ const learnAboutEvents = function () {
 };
 // learnAboutEvents();
 
+/*
+ *
+ * Event Delegation: How to create only one listerner for multiple targets
+ *
+ */
 const learnAboutDelegation = function () {
   // METHOD 1: ADD EVENT LISTENER TO EACH LINK: CREATES USELESS COPIES
   // document.querySelectorAll('.nav__link').forEach(function (el) {
@@ -166,7 +224,11 @@ const learnAboutDelegation = function () {
 };
 learnAboutDelegation();
 
-// SELECTING ELEMENTS
+/*
+ *
+ * Selecting DOM Elements: Class, Tag, ID
+ *
+ */
 const learnAboutSelecting = function () {
   log(document.documentElement); // outputs the whole document
   log(document.head);
@@ -184,7 +246,11 @@ const learnAboutSelecting = function () {
 };
 // learnAboutSelecting();
 
-// CREATING AND INSERTING ELEMENTS
+/*
+ *
+ * Creating & Inserting Elements
+ *
+ */
 const learnAboutInsertingDeleting = function () {
   // .insertAdjacentHTML is cool, but there's better (?)
 
@@ -209,7 +275,11 @@ const learnAboutInsertingDeleting = function () {
 };
 // learnAboutInsertingDeleting();
 
-// STYLING ELEMENTS
+/*
+ *
+ * Styling Elements: Reading and setting properties
+ *
+ */
 const learnAboutStyling = function () {
   const message = document.querySelector('.cookie-message');
   message.style.backgroundColor = '#37383d';
@@ -250,6 +320,11 @@ const learnAboutStyling = function () {
 };
 // learnAboutStyling();
 
+/*
+ *
+ * Traversing the DOM: Moving from element to element
+ *
+ */
 const learnAboutTraversing = function () {
   const h1 = document.querySelector('h1');
   // Going downwards: Child
