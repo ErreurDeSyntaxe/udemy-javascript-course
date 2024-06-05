@@ -1,6 +1,34 @@
 'use strict';
 const log = console.log;
 
+const activateTabComponent = function () {
+  const tabs = document.querySelectorAll('.operations__tab');
+  const tabsContainer = document.querySelector('.operations__tab-container');
+  const tabsContent = document.querySelectorAll('.operations__content');
+
+  // bad practice
+  // tabs.forEach(tab => tab.addEventListener('click', () => log('tab')));
+  tabsContainer.addEventListener('click', function (e) {
+    const clicked = e.target.closest('.operations__tab');
+    // Guard clause: if the container was clicked but none of the buttons were
+    if (!clicked) return;
+
+    log(clicked.dataset.tab);
+    // Deactivate & Activate the tab
+    tabs.forEach(t => t.classList.remove('operations__tab--active'));
+    clicked.classList.add('operations__tab--active');
+
+    // Hide & Display the tab content
+    document
+      .querySelector('.operations__content--active')
+      .classList.remove('operations__content--active');
+    document
+      .querySelector(`.operations__content--${clicked.dataset.tab}`)
+      .classList.add('operations__content--active');
+  });
+};
+activateTabComponent();
+
 const activateModal = function () {
   const modal = document.querySelector('.modal');
   const overlay = document.querySelector('.overlay');
@@ -255,4 +283,4 @@ const learnAboutTraversing = function () {
     }
   });
 };
-learnAboutTraversing();
+// learnAboutTraversing();
