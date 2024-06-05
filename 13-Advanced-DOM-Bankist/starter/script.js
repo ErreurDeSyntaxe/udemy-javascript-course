@@ -111,7 +111,7 @@ const learnAboutEvents = function () {
     true
   );
 };
-learnAboutEvents();
+// learnAboutEvents();
 
 const learnAboutDelegation = function () {
   // METHOD 1: ADD EVENT LISTENER TO EACH LINK: CREATES USELESS COPIES
@@ -221,3 +221,38 @@ const learnAboutStyling = function () {
   logo.classList.contains('something');
 };
 // learnAboutStyling();
+
+const learnAboutTraversing = function () {
+  const h1 = document.querySelector('h1');
+  // Going downwards: Child
+  log(h1.querySelectorAll('.highlight')); // Will look deep inside h1
+  log(h1.childNodes); // every DIRECT child (comments, text, all of it)
+  log(h1.children); // live collection of elements (no text, no comment)
+  log(h1.firstChild); // When
+  log(h1.firstElementChild); // <span class="highlight">banking</span>
+  // h1.firstChild.style.color = 'white'; // typeError
+  h1.firstElementChild.style.color = 'white';
+  h1.lastElementChild.style.color = 'orangered';
+
+  // Going upwards: parents
+  log(h1.parentNode);
+  log(h1.parentElement); // usually the one we want
+
+  log(h1.closest('div')); // returns closest 'div' parent
+  log(h1.closest('.header')); // returns closest '.header' parent
+  h1.closest('.header').style.backgroundColor = 'var(--color-secondary-darker)';
+
+  // Going sideways: siblings
+  log(h1.previousElementSibling); // null because h1 is first child
+  log(h1.nextElementSibling); // not null because h1 has siblings
+  log(h1.previousSibling); // can return comments and text
+  log(h1.nextSibling); // so we usually want ElementSibling
+
+  log(h1.parentElement.children);
+  [...h1.parentElement.children].forEach(function (el) {
+    if (el !== h1) {
+      el.style.transform = 'scale(0.5)';
+    }
+  });
+};
+learnAboutTraversing();
