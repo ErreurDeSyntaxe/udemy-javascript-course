@@ -6,7 +6,6 @@ const log = console.log;
  * Default Parameters: How to set default values to avoid bugs
  *
  */
-
 const learnAboutDefaults = function () {
   const bookings = [];
 
@@ -40,7 +39,6 @@ const learnAboutDefaults = function () {
  * Passing Arguments: by reference vs by value
  *
  */
-
 const learnAboutArguments = function () {
   const flight = 'LH234';
   const xavier = {
@@ -77,7 +75,6 @@ const learnAboutArguments = function () {
  * Functions as First Class Citizens
  *
  */
-
 const learnAboutFunctions = function () {
   const oneWord = function (str) {
     return str.replace(/ /g, '').toLowerCase();
