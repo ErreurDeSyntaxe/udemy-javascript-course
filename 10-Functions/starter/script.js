@@ -94,37 +94,56 @@ const learnAboutFunctions = function () {
 
   transformer('JavaScript is the best!', upperFirstWord);
   transformer('JavaScript is the best!', oneWord);
-
   // JS uses callbacks all the time
   const high5 = function () {
     log('Hi 5!');
   };
   document.body.addEventListener('click', high5);
 
+  const testFunctionKnowledge = function () {
+    const paintPicture = function (artistName) {
+      log(`${artistName} drew this: (╯°□°)╯︵ ┻━┻`);
+    };
+
+    const writePoem = function (artistName) {
+      log(`${artistName} wrote this: Roses are rgb(255, 0, 0)`);
+    };
+
+    const makeArt = function (artistName, artForm) {
+      artForm(artistName);
+    };
+    makeArt('Jeanne', paintPicture);
+    makeArt('Xavier', writePoem);
+  };
+  // testFunctionKnowledge();
+
   /*
    *
    * Functions Returning Functions
    *
    */
-  const greet = function (greeting) {
-    return function (name) {
-      log(`${greeting} ${name}`);
+  const learnMoreAboutFunctions = function () {
+    const greet = function (greeting) {
+      return function (name) {
+        log(`${greeting} ${name}`);
+      };
     };
-  };
-  const greeterHey = greet('Hey');
+    const greeterHey = greet('Hey');
 
-  greeterHey('Xavier');
-  greeterHey('Jeanne');
-  greet('Hello')('Maïté');
+    greeterHey('Xavier');
+    greeterHey('Jeanne');
+    greet('Hello')('Maïté');
 
-  const greetArrow = greeting => {
-    return name => {
-      log(`${greeting} ${name}`);
+    const greetArrow = greeting => {
+      return name => {
+        log(`${greeting} ${name}`);
+      };
     };
-  };
-  const greeterArrowHey = greetArrow('Hey');
+    const greeterArrowHey = greetArrow('Hey');
 
-  greeterArrowHey('Papi Marc');
+    greeterArrowHey('Papi Marc');
+  };
+  // learnMoreAboutFunctions();
 };
 // learnAboutFunctions();
 
