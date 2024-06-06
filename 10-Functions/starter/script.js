@@ -158,11 +158,12 @@ const learnAboutCallApplyBind = function () {
     airline: 'Lufthansa',
     iataCode: 'LH',
     bookings: [],
+    // book: function (flightNum, passName) {}
     book(flightNum, passName) {
       this.bookings.push({ flight: `${this.iataCode}${flightNum}`, passName });
-      log(
-        `${passName} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
-      );
+      // log(
+      //   `${passName} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+      // );
     },
   };
   // Bookings for first airline
@@ -184,89 +185,115 @@ const learnAboutCallApplyBind = function () {
    */
 
   // Copy the function from a pre-existing object
-  // I expect the booking will be made for the First Airline
-  // I was wrong. It crashes (undefined) because book is a function without a
-  // this
-  // const book = lufthansa.book;
-  // book(23, 'Jeanne Bertrand');
-
   const book = lufthansa.book;
-  // Call sets the object as the first argument
-  book.call(eurowings, 23, 'Jeanne Bertrand');
-  log(eurowings);
-
-  book.call(lufthansa, 239, 'Mamie Jo');
-  log(lufthansa);
-
-  const swiss = {
-    airline: 'Swiss Air Lines',
-    iataCode: 'LX',
-    bookings: [],
-  };
-  book.call(swiss, 1234, 'Mamie Thalie');
-  log(swiss);
+  // book(23, 'Jeanne Bertrand');
+  // I expected the booking would be made for the First Airline
+  // I was wrong. It crashed (undefined) because book is a function without
+  // a this keyword (it's undefined in an regular function call)
 
   /*
    *
-   * Using the apply Method: myObject.apply(THIS, PARAMarray)
+   * The Call Method: myObject.apply(THIS, param1, param2,...)
    *
    */
-  const flightData = [583, 'George Cooper'];
-  book.apply(swiss, flightData); // Not common anymore
-  book.call(swiss, ...flightData); // Just spread the array
-  log(swiss);
+  const learnAboutCall = function () {
+    // Call sets the object as the first argument
+    book.call(eurowings, 23, 'Jeanne Bertrand');
+    log(eurowings);
 
-  /*
-   *
-   * Using the bind Method: Doesn't call function, Returns function
-   *
-   */
+    book.call(lufthansa, 239, 'Mamie Jo');
+    log(lufthansa);
 
-  // This functions's this will always be the same object
-  const bookLH = book.bind(lufthansa);
-  const bookLX = book.bind(swiss);
-  const bookEW = book.bind(eurowings);
-  bookEW(23, 'Steven Williams');
-  log(eurowings);
-
-  // Partial Application: Some of the values are predefined
-  const bookEW23 = book.bind(eurowings, 23);
-  bookEW23('Papi Marc');
-  log(eurowings);
-
-  // With Event Listeners
-  lufthansa.planes = 300;
-  lufthansa.buyPlane = function () {
-    this.planes++;
-    log(this.planes);
-  };
-  // document
-  //   .querySelector('.buy')
-  //   .addEventListener('click', () => lufthansa.buyPlane());
-  // Without an arrow function, this === buyButton
-  // The arrow function lets this === lufthansa
-
-  document
-    .querySelector('.buy')
-    .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
-
-  // Partial Application: presetting parameters
-  const addTax = (rate, value) => value + value * rate;
-  log(addTax(0.1, 200));
-
-  // Use null when the THIS doesn't matter
-  const addVAT = addTax.bind(null, 0.23);
-  log(addVAT(100));
-
-  const addTaxes = function (rate) {
-    return function (subtotal) {
-      return subtotal + subtotal * rate;
+    const swiss = {
+      airline: 'Swiss Air Lines',
+      iataCode: 'LX',
+      bookings: [],
     };
+    book.call(swiss, 1234, 'Mamie Thalie');
+    log(swiss);
   };
-  const add15 = addTaxes(0.15);
-  log(add15(300));
+  // learnAboutCall();
+
+  /*
+   *
+   * The Apply Method: myObject.apply(THIS, PARAMarray)
+   *
+   */
+  const learnAboutApply = function () {
+    // copied from learnAboutCall
+    const swiss = {
+      airline: 'Swiss Air Lines',
+      iataCode: 'LX',
+      bookings: [],
+    };
+    const flightData = [583, 'George Cooper'];
+    book.apply(swiss, flightData); // Not common anymore
+    book.call(swiss, ...flightData); // Just spread the array
+    log(swiss);
+  };
+  // learnAboutApply();
+
+  /*
+   *
+   * The Bind Method: myFunction.bind(THIS) || myFunction(THIS, param1,...)
+   * Bind does NOT call the function. It returns a function with a
+   * a bound THIS keyword
+   *
+   */
+  const learnAboutBind = function () {
+    // copied from learnAboutCall
+    const swiss = {
+      airline: 'Swiss Air Lines',
+      iataCode: 'LX',
+      bookings: [],
+    };
+    // This functions's this will always be the same object
+    const bookLH = book.bind(lufthansa);
+    const bookLX = book.bind(swiss);
+    const bookEW = book.bind(eurowings);
+    bookEW(23, 'Steven Williams');
+    log(eurowings);
+
+    // Partial Application: Some of the values are predefined
+    const bookEW23 = book.bind(eurowings, 23);
+    bookEW23('Papi March');
+    log(eurowings);
+
+    // With Event Listeners
+    lufthansa.planes = 300;
+    lufthansa.buyPlane = function () {
+      this.planes++;
+      log(this.planes);
+    };
+    // document
+    //   .querySelector('.buy')
+    //   .addEventListener('click', () => lufthansa.buyPlane());
+    // Without an arrow function, this === buyButton
+    // The arrow function lets this === lufthansa
+
+    document
+      .querySelector('.buy')
+      .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+
+    // Partial Application: presetting parameters
+    const addTax = (rate, value) => value + value * rate;
+    log(addTax(0.1, 200));
+
+    // Use null when the THIS doesn't matter
+    const addVAT = addTax.bind(null, 0.23);
+    log(addVAT(100));
+
+    const addTaxes = function (rate) {
+      return function (subtotal) {
+        return subtotal + subtotal * rate;
+      };
+    };
+    const add15 = addTaxes(0.15);
+    log(add15(300));
+  };
+  learnAboutBind();
 };
-// learnAboutCallApplyBind();
+learnAboutCallApplyBind();
 
 /*
  *
