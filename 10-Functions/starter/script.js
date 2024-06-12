@@ -297,6 +297,71 @@ learnAboutCallApplyBind();
 
 /*
  *
+ * Redo Coding Challenge #1
+ *
+ */
+const redoCodingChallenge1 = function () {
+  // Test DATA 1: [5, 2, 3]
+  const data1 = {
+    answers: [5, 2, 3],
+  };
+  // Test DATA 2: [1, 5, 3, 9, 6, 1]
+  const data2 = {
+    answers: [1, 5, 3, 9, 6, 1],
+  };
+  const poll = {
+    question: 'What is your favorite programming language?',
+    options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+    answers: new Array(4).fill(0),
+    registerNewAnswer() {
+      const answer = prompt(
+        `${this.question}\n${this.options.join('\n')}\n(Write option number)`
+      );
+      if (
+        +answer <= 3 &&
+        +answer >= 0 &&
+        !answer.includes(' ') &&
+        answer !== ''
+      ) {
+        this.answers[answer]++;
+        const displayType = prompt(
+          'Display type:\ns: string\nanything else: array'
+        );
+        if (displayType === 's') {
+          this.displayResults(`string`);
+          return;
+        }
+        this.displayResults();
+        return;
+      }
+      this.registerNewAnswer();
+    },
+    displayResults(type = 'array') {
+      if (type === 'string') {
+        log(`Poll results are ${this.answers.join(', ')}`);
+        return;
+      }
+      log(this.answers);
+    },
+  };
+  document
+    .querySelector('.poll')
+    .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+  const data2Display = poll.displayResults.bind(data2);
+  data2Display('string');
+  poll.displayResults.call(data2, 'array');
+  poll.displayResults.apply(
+    {
+      answers: [1, 5, 3, 9, 6, 1],
+    },
+    ['string']
+  );
+};
+redoCodingChallenge1();
+
+/*
+ *
  * Coding Challenge #1
  *
  */
