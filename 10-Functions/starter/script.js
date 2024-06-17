@@ -293,7 +293,7 @@ const learnAboutCallApplyBind = function () {
   };
   learnAboutBind();
 };
-learnAboutCallApplyBind();
+// learnAboutCallApplyBind();
 
 /*
  *
@@ -358,7 +358,7 @@ const redoCodingChallenge1 = function () {
     ['string']
   );
 };
-redoCodingChallenge1();
+// redoCodingChallenge1();
 
 /*
  *
