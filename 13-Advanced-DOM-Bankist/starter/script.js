@@ -36,6 +36,79 @@ activateMenuFade();
 
 /*
  *
+ * Navigation Sticky Effect: Upon scrolling down, nav sticks to top
+ *
+ */
+const activateStickyNav = function () {
+  const nav = document.querySelector('.nav');
+  const section1 = document.querySelector('#section--1');
+  const initialCoords = section1.getBoundingClientRect();
+  log(initialCoords);
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
+  });
+};
+// activateStickyNav();
+
+/*
+ *
+ * Intersection Observer API: efficient scroll event
+ *
+ */
+const learnAboutIntersectionObserverAPI = function () {
+  const section1 = document.querySelector('#section--1');
+
+  // first argument of IntersectionObserver
+  const obsCallback = function (entries, observer) {
+    entries.forEach(entry => {
+      log(entry);
+    });
+  };
+
+  // second argument of IntersectioObserver
+  const obsOptions = {
+    // root: what we want to intersect with (here it's section1)
+    // null === entire viewport
+    root: null,
+    // threshold: percentage of intersection that triggers the callback
+    // 0.1 === 10% within the root -> callback function is called
+    // could be an array
+    threshold: [0, 0.2],
+  };
+
+  // the IntersectionObserver with its 2 arguments
+  const observer = new IntersectionObserver(obsCallback, obsOptions);
+  observer.observe(section1);
+};
+// learnAboutIntersectionObserverAPI();
+
+/*
+ *
+ * Navigation Sticky Effect: Upon observing, nav sticks to top
+ *
+ */
+const activateStickyNavBetter = function () {
+  const nav = document.querySelector('.nav');
+  const navHeight = nav.getBoundingClientRect().height;
+  const header = document.querySelector('.header');
+  const stickyNav = function (entries) {
+    const [entry] = entries; // const [entry] = entries[0]
+
+    if (!entry.isIntersecting) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
+  };
+  const headerObserver = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`,
+  });
+  headerObserver.observe(header);
+};
+activateStickyNavBetter();
+
+/*
+ *
  * Tab Component: Finding the elements and applying/removing styles
  *
  */
