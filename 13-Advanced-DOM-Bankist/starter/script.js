@@ -107,11 +107,16 @@ const activateStickyNavBetter = function () {
 };
 activateStickyNavBetter();
 
+/*
+ *
+ * Reveal on Scroll: Animate sections to slide upwards as we scroll down
+ *
+ */
 const revealOnScroll = function () {
   const allSections = document.querySelectorAll('.section');
   const revealSection = function (entries, observer) {
     const [entry] = entries;
-    log(entry);
+    // log(entry);
 
     if (!entry.isIntersecting) return;
     entry.target.classList.remove('section--hidden');
@@ -129,6 +134,33 @@ const revealOnScroll = function () {
   });
 };
 revealOnScroll();
+
+/*
+ *
+ * Lazy Loading: Load images as we scroll down
+ *
+ */
+const lazyLoadImages = function () {
+  const lazyImages = document.querySelectorAll('img[data-src]');
+  const loadImg = function (entries, observer) {
+    const [entry] = entries;
+    if (!entry.isIntersecting) return;
+    entry.target.src = entry.target.dataset.src;
+    entry.target.addEventListener('load', function () {
+      entry.target.classList.remove('lazy-img');
+    });
+    observer.unobserve(entry.target);
+  };
+
+  const imgObserver = new IntersectionObserver(loadImg, {
+    root: null,
+    threshold: 0,
+    rootMargin: '200px',
+  });
+
+  lazyImages.forEach(img => imgObserver.observe(img));
+};
+lazyLoadImages();
 
 /*
  *
