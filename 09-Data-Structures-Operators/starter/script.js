@@ -612,7 +612,7 @@ const learnAboutRest = function () {
   const x = [23, 5, 7];
   add(...x);
 };
-learnAboutRest();
+// learnAboutRest();
 
 /*
  *
