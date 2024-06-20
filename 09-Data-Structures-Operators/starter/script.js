@@ -393,7 +393,7 @@ const learnAboutDestructuring = function () {
   const [p = 1, q = 1, r = 1] = [420, 917];
   console.log(`p: ${p}, q: ${q}, r: ${r}`);
 };
-learnAboutDestructuring();
+// learnAboutDestructuring();
 
 /*
  *
@@ -408,20 +408,20 @@ const learnAboutArrays = function () {
   const neighbors = ['Japan', 'Korea', 'China'];
 
   // Adds at the end of the array. Returns new length.
-  console.log(neighbors.push('Utopia'));
-  console.table(neighbors);
+  console.log(`New length of neighbors array: ${neighbors.push('Utopia')}`);
+  console.table('proof', neighbors);
 
   // Adds at the beginning of the array. Returns new length.
-  console.log(neighbors.unshift('Canada'));
-  console.table(neighbors);
+  console.log(`New length of neighbors array: ${neighbors.unshift('Canada')}`);
+  console.table('proof', neighbors);
 
   // Removes the first item of the array. Returns item.
-  console.log(neighbors.shift());
-  console.table(neighbors);
+  console.log(`Shift removes & returns the 1st item: ${neighbors.shift()}`);
+  console.table('proof', neighbors);
 
   // Removes the last item of the array. Returns item.
-  console.log(neighbors.pop());
-  console.table(neighbors);
+  console.log(`Pop removes & returns the last item: ${neighbors.pop()}`);
+  console.table('proof', neighbors);
 
   neighbors.push('Germany');
 
@@ -461,7 +461,9 @@ const learnAboutArrays = function () {
     },
   };
   country.describeCountry();
+  log(`isIsland property not created yet: ${country.isIsland}`);
   country.checkIsland();
+  log(`isIsland property recently created: ${country.isIsland}`);
 
   country.capital = '台北';
   country['population'] = 24;
