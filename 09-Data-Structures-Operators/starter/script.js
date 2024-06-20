@@ -568,9 +568,13 @@ const learnAboutRest = function () {
   // 1) Destructuring
 
   // SPREAD because on the RIGHT side of =
+  // That explanation seems wrong. It's the spread operator
+  // because it UNPACKS values that were packed together.
   const unAutreTableau = [1, 2, ...[3, 4]];
 
   // REST because on the LEFT side of =
+  // That explanation seems wrong. It's the rest operator
+  // because it COLLECTS values that were separated
   const [monster, fantome, ...others] = [1, 2, 3, 4, 5];
   log(monster, fantome, others); // others is now an array
 
@@ -592,10 +596,15 @@ const learnAboutRest = function () {
   // 2) Functions
   const add = function (...numbers) {
     let sumOfAll = 0;
-    for (let i = 0; i < numbers.length; i++) {
-      sumOfAll += numbers[i];
-    }
-    log(sumOfAll);
+    // for (let i = 0; i < numbers.length; i++) {
+    //   sumOfAll += numbers[i];
+    // }
+
+    numbers.forEach(number => (sumOfAll += number));
+
+    const totalSum = numbers.reduce((acc, curr) => acc + curr, 0);
+    log('reduce method: ', totalSum);
+    log('forEach method:', sumOfAll);
   };
 
   add(1, 2, 3, 4, 5, 6, 7, 8);
@@ -603,7 +612,7 @@ const learnAboutRest = function () {
   const x = [23, 5, 7];
   add(...x);
 };
-// learnAboutRest();
+learnAboutRest();
 
 /*
  *
