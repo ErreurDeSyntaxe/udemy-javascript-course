@@ -133,7 +133,7 @@ const revealOnScroll = function () {
     section.classList.add('section--hidden');
   });
 };
-// revealOnScroll();
+revealOnScroll();
 
 /*
  *
@@ -275,6 +275,28 @@ const activateSlider = function () {
   });
 };
 activateSlider();
+
+/*
+ *
+ * Life Cycle of Web Page: The Events that Happen during the life cycle
+ *
+ */
+
+const learnAboutLifeCycle = function () {
+  document.addEventListener('DOMContentLoaded', function (e) {
+    log('HTML parsed and DOM tree built');
+  });
+
+  window.addEventListener('load', function (e) {
+    log('Page fully loaded', e);
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    log(e);
+  });
+};
+learnAboutLifeCycle();
 
 /*
  *
