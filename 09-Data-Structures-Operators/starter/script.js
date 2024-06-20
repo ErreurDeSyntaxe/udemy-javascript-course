@@ -364,21 +364,21 @@ const learnAboutDestructuring = function () {
   console.log(premier, troisieme);
 
   let [main, secondary] = restaurant.categories;
-  console.log(main, secondary);
+  console.log(`ORIGINALLY main: ${main}, secondary: ${secondary}`);
 
   // ES5 way of switching variables
   const temp = main;
   main = secondary;
-  secondary = main;
-  console.log(main, secondary);
+  secondary = temp;
+  console.log(`ES5 SWITCH main: ${main}, secondary: ${secondary}`);
 
   // SE6 way of switching variables: destructuring
   [main, secondary] = [secondary, main];
-  console.log(main, secondary);
+  console.log(`ES6 SWITCH main: ${main}, secondary: ${secondary}`);
 
   console.log(restaurant.order(2, 0));
   const [starter, mainCourse] = restaurant.order(2, 0);
-  console.log(starter, mainCourse);
+  console.log(`starter: ${starter}, mainCourse: ${mainCourse}`);
 
   // Nested destructuring
   const nestedArray = [2, 4, [5, 6]];
@@ -391,9 +391,9 @@ const learnAboutDestructuring = function () {
 
   // Default values: if there's no value, the variables are set to 1
   const [p = 1, q = 1, r = 1] = [420, 917];
-  console.log(p, q, r);
+  console.log(`p: ${p}, q: ${q}, r: ${r}`);
 };
-// learnAboutDestructuring();
+learnAboutDestructuring();
 
 /*
  *
