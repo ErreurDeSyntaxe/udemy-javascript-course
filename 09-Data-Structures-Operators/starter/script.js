@@ -639,7 +639,7 @@ const learnAboutSpread = function () {
   // Iterables: arrays, strings, maps, sets, NOT OBJECTS
   const myName = 'Xavier B';
   const letters = [...myName];
-  // log(letters);
+  log(letters);
 
   const ingredients = [
     prompt("Let's make pasta! Ingredient 1?"),
