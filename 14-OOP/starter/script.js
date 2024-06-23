@@ -161,3 +161,37 @@ const codingChallenge1 = function () {
   log(bmw, mercedes);
 };
 // codingChallenge1();
+
+/*
+ *
+ *
+ * JavaScript Classes: Syntactic Sugar and we love candy
+ *
+ *
+ */
+const learnAboutClasses = function () {
+  // const ClassExpression = class {};
+  // class ClassDeclaration {}
+
+  class PersonCl {
+    constructor(firstName, birthYear) {
+      this.firstName = firstName;
+      this.birthYear = birthYear;
+    }
+    // 1st way of adding methods
+    calcAge() {
+      this.age = 2024 - this.birthYear;
+      log(`${this.firstName} is ${this.age}`);
+    }
+  }
+
+  const jeanne = new PersonCl('Jeanne', 1990);
+  jeanne.calcAge();
+
+  // 2nd way of adding methods
+  PersonCl.prototype.greet = function () {
+    log(`Hey ${this.firstName}`);
+  };
+  jeanne.greet();
+};
+learnAboutClasses();
