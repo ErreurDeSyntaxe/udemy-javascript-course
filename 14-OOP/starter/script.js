@@ -194,4 +194,42 @@ const learnAboutClasses = function () {
   };
   jeanne.greet();
 };
-learnAboutClasses();
+// learnAboutClasses();
+
+const learnAboutGetSet = function () {
+  const account = {
+    owner: 'Xavier',
+    movements: [200, 300, 400, 500],
+
+    get latest() {
+      return this.movements.slice(-1);
+    },
+
+    set latest(mov) {
+      this.movements.push(mov);
+    },
+  };
+  log(account.latest);
+  account.latest = 50;
+  log(account.latest);
+
+  class PersonCl {
+    constructor(fullName, birthYear) {
+      this.fullName = fullName;
+      this.birthYear = birthYear;
+    }
+    get age() {
+      return 2024 - this.birthYear;
+    }
+    set fullName(userName) {
+      // added the underscore because there was conflict
+      // the constructor already creates a property called 'fullName'
+      // so the setter causes a conflict. convention === add _ to variable name
+      if (userName.includes(' ')) this._fullName = userName;
+      else alert(`${userName} is not a full name`);
+    }
+  }
+  const jeanne = new PersonCl('Jeanne Chen', 1990);
+  log(jeanne.age);
+};
+learnAboutGetSet();
