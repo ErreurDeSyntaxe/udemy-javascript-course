@@ -89,6 +89,13 @@ const learnAboutPrototypes = function () {
 };
 // learnAboutPrototypes();
 
+/*
+ *
+ *
+ * Prototypal Inheritance: The Protoype Chain
+ *
+ *
+ */
 const learnAboutInheritance = function () {
   const Person = function (firstName, birthYear) {
     this.firstName = firstName;
@@ -124,4 +131,33 @@ const learnAboutInheritance = function () {
   console.dir(h1);
   console.dir(log);
 };
-learnAboutInheritance();
+// learnAboutInheritance();
+
+/*
+ *
+ *
+ * Coding Challenge #1: Objects and Inherited Methods
+ *
+ *
+ */
+const codingChallenge1 = function () {
+  const Car = function (make, speed) {
+    this.make = make;
+    this.speed = speed;
+  };
+  Car.prototype.accelerate = function () {
+    this.speed += 10;
+  };
+  Car.prototype.brake = function () {
+    this.speed -= 5;
+  };
+
+  const mercedes = new Car('Mercedes', 95);
+  const bmw = new Car('BMW', 120);
+
+  log(bmw, mercedes);
+  bmw.accelerate();
+  mercedes.brake();
+  log(bmw, mercedes);
+};
+// codingChallenge1();
