@@ -196,6 +196,13 @@ const learnAboutClasses = function () {
 };
 // learnAboutClasses();
 
+/*
+ *
+ *
+ * Get & Set: Getters and Setters act much like properties
+ *
+ *
+ */
 const learnAboutGetSet = function () {
   const account = {
     owner: 'Xavier',
@@ -228,8 +235,15 @@ const learnAboutGetSet = function () {
       if (userName.includes(' ')) this._fullName = userName;
       else alert(`${userName} is not a full name`);
     }
+    static clone() {
+      // this method is not avaiable to PersonCl objects
+      // rather, it is avaible on PersonCl (a name space)
+      log('Clone produced!');
+    }
   }
   const jeanne = new PersonCl('Jeanne Chen', 1990);
   log(jeanne.age);
+  // jeanne.clone(); // TypeError
+  PersonCl.clone();
 };
 learnAboutGetSet();
