@@ -247,3 +247,36 @@ const learnAboutGetSet = function () {
   PersonCl.clone();
 };
 // learnAboutGetSet();
+
+const learnAboutObjectCreate = function () {
+  const PersonProto = {
+    calcAge() {
+      this.age = 2024 - this.birthYear;
+    },
+
+    init(firstName, birthYear) {
+      this.firstName = firstName;
+      this.birthYear = birthYear;
+    },
+  };
+
+  const stupidWay = function () {
+    // create the object based on the prototype provided in parentheses
+    const steven = Object.create(PersonProto);
+    log(steven); // empty {}
+    steven.name = 'Steve';
+    steven.birthYear = 2020;
+    log(steven); // {} has 2 properties
+    steven.calcAge();
+    log(steven);
+  };
+  // stupidWay();
+
+  const rightWay = function () {
+    const stevo = Object.create(PersonProto);
+    stevo.init('Stevo', 2020);
+    log(stevo);
+  };
+  rightWay();
+};
+learnAboutObjectCreate();
