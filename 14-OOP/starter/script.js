@@ -322,4 +322,71 @@ const codingChallenge2 = function () {
   log(ford.speed);
   log(ford.speedUS);
 };
-codingChallenge2();
+// codingChallenge2();
+
+/*
+ *
+ *
+ * Class Inheritance: Constructors, ES6 Classes & Object.create
+ *
+ *
+ */
+const learnAboutClassInheritance = function () {
+  /*
+   * Inheritance Through Constructors
+   */
+  const thruConstructors = function () {
+    // The parent object
+    const Person = function (firstName, birthYear) {
+      this.firstName = firstName;
+      this.birthYear = birthYear;
+    };
+    Person.prototype.calcAge = function () {
+      this.age = 2024 - this.birthYear;
+      log(this.age);
+    };
+    const jeanne = new Person('Jeanne', 1990);
+    jeanne.calcAge();
+
+    // The child object
+    const Student = function (firstName, birthYear, course) {
+      Person.call(this, firstName, birthYear);
+      this.course = course;
+    };
+
+    // Link the parent and child Objects' prototypes
+    // Has to be done before adding methods to child prototype
+    // otherwise Object.create returns an empty prototype, overwriting stuff
+    Student.prototype = Object.create(Person.prototype);
+    // Student.prototype = Person.prototype; // Doesn't work
+    Student.prototype.constructor = Student; // Reassign to correct value
+
+    Student.prototype.introduce = function () {
+      log(`My name is ${this.firstName}, and I study ${this.course}.`);
+    };
+
+    const xavier = new Student('Xavier', 1988, 'JS');
+    log(xavier);
+    xavier.introduce();
+    xavier.calcAge(); // doesn't work w/o Student.prototype = Object.create
+
+    log('xavier.__proto__:', xavier.__proto__);
+    log('xavier.__proto__^2:', xavier.__proto__.__proto__);
+
+    console.dir(Student.prototype.constructor);
+  };
+  // thruConstructors();
+
+  /*
+   * Inheritance Through ES6 Classes
+   */
+  const thruES6Classes = function () {};
+  thruES6Classes();
+
+  /*
+   * Inheritance Through Object.create
+   */
+  const thruObjectDotCreate = function () {};
+  thruObjectDotCreate();
+};
+learnAboutClassInheritance();
