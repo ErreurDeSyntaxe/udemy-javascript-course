@@ -246,4 +246,4 @@ const learnAboutGetSet = function () {
   // jeanne.clone(); // TypeError
   PersonCl.clone();
 };
-learnAboutGetSet();
+// learnAboutGetSet();
