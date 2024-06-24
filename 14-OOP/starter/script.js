@@ -248,6 +248,13 @@ const learnAboutGetSet = function () {
 };
 // learnAboutGetSet();
 
+/*
+ *
+ *
+ * Object.create: the least used way, but the "truest" object inheritance?
+ *
+ *
+ */
 const learnAboutObjectCreate = function () {
   const PersonProto = {
     calcAge() {
@@ -279,4 +286,40 @@ const learnAboutObjectCreate = function () {
   };
   rightWay();
 };
-learnAboutObjectCreate();
+// learnAboutObjectCreate();
+
+/*
+ *
+ *
+ * Coding Challenge #2: Redo #1 using a class & adding get/set methods
+ *
+ *
+ */
+const codingChallenge2 = function () {
+  class Car {
+    constructor(make, speed) {
+      this.make = make;
+      this.speed = speed;
+    }
+    accelerate() {
+      this.speed += 10;
+    }
+    brake() {
+      this.speed -= 5;
+    }
+
+    get speedUS() {
+      return this.speed / 1.6;
+    }
+    set speedUS(newSpeed) {
+      this.speed = newSpeed * 1.6;
+    }
+  }
+
+  const ford = new Car('Ford', 100);
+  log(ford);
+  ford.speedUS = 100;
+  log(ford.speed);
+  log(ford.speedUS);
+};
+codingChallenge2();
