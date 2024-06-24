@@ -1064,7 +1064,7 @@ const learnSomeStuff = function () {
   const properties = Object.keys(openingHours);
   log(properties);
 
-  let openStr = `We are open of ${properties.length} days: `;
+  let openStr = `We are open ${properties.length} days: `;
   for (const day of Object.keys(openingHours)) {
     openStr += ` ${day}, `;
   }
