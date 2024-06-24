@@ -378,6 +378,54 @@ const learnAboutClassInheritance = function () {
   // thruConstructors();
 
   /*
+   * Coding Challenge #3: Inheritance through Constructuors
+   */
+  const codingChallenge3 = function () {
+    // Parent {}
+    const Car = function (make, speed) {
+      this.make = make;
+      this.speed = speed;
+    };
+    Car.prototype.accelerate = function () {
+      this.speed += 10;
+      log(`${this.make} now driving ${this.speed} km/h`);
+    };
+    Car.prototype.brake = function () {
+      this.speed -= 5;
+      log(`${this.make} now driving ${this.speed} km/h`);
+    };
+
+    // Child {}
+    const ElectricCar = function (make, speed, charge) {
+      Car.call(this, make, speed);
+      this.charge = charge;
+    };
+
+    // Linking parent and child {}
+    ElectricCar.prototype = Object.create(Car.prototype);
+
+    ElectricCar.prototype.chargeBattery = function (chargeTo) {
+      this.charge = chargeTo;
+      log(`${this.make} now has a charge of ${this.charge}%`);
+    };
+    ElectricCar.prototype.accelerate = function () {
+      this.speed += 20;
+      this.charge -= 1;
+      log(
+        `${this.make} now driving ${this.speed} km/h and ${this.charge}% charge`
+      );
+    };
+
+    const honda = new Car('Honda', 40);
+    const tesla = new ElectricCar('Tesla', 50, 60);
+
+    honda.accelerate();
+    tesla.accelerate();
+    tesla.chargeBattery(100);
+  };
+  codingChallenge3();
+
+  /*
    * Inheritance Through ES6 Classes
    */
   const thruES6Classes = function () {};
