@@ -423,12 +423,49 @@ const learnAboutClassInheritance = function () {
     tesla.accelerate();
     tesla.chargeBattery(100);
   };
-  codingChallenge3();
+  // codingChallenge3();
 
   /*
    * Inheritance Through ES6 Classes
    */
-  const thruES6Classes = function () {};
+  const thruES6Classes = function () {
+    class Person {
+      constructor(fullName, birthYear) {
+        this.fullName = fullName;
+        this.birthYear = birthYear;
+      }
+      calcAge() {
+        log(`${2024 - this.birthYear} years old`);
+      }
+      set fullName(userName) {
+        if (userName.includes(' ')) this._fullName = userName;
+        else alert(`${userName} is not a full name`);
+      }
+      static clone() {
+        log('Clone produced!');
+      }
+    }
+
+    class Student extends Person {
+      constructor(fullName, birthYear, program) {
+        // Always the first thing in the constructor bc super() creates
+        // the this keyword
+        super(fullName, birthYear);
+        this.program = program;
+      }
+      study() {
+        log(`I'm actively learning ${this.program}`);
+      }
+      calcAge() {
+        log(`I'm ${2024 - this.birthYear} years old!`);
+      }
+    }
+
+    const marc = new Student('Marc Dinosaur', 1959, 'Computer Science');
+    log(marc);
+    marc.study();
+    marc.calcAge();
+  };
   thruES6Classes();
 
   /*
