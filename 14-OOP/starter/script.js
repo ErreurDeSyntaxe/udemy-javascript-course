@@ -471,7 +471,35 @@ const learnAboutClassInheritance = function () {
   /*
    * Inheritance Through Object.create
    */
-  const thruObjectDotCreate = function () {};
+  const thruObjectDotCreate = function () {
+    const Person = {
+      calcAge() {
+        log(2024 - this.birthYear);
+      },
+      init(fullName, birthYear) {
+        this.fullName = fullName;
+        this.birthYear = birthYear;
+      },
+    };
+    const johanne = Object.create(Person);
+
+    const Student = Object.create(Person);
+    Student.init = function (fullName, birthYear, program) {
+      Person.init.call(this, fullName, birthYear);
+      this.program = program;
+    };
+    Student.introduce = function () {
+      log(`Hi! I'm ${this.fullName}. I study ${this.program}.`);
+    };
+
+    const jay = Object.create(Student);
+    jay.init('Jay Kay', 1001, 'Egyptology');
+    log(jay);
+    jay.introduce();
+    jay.calcAge();
+
+    // Why is Object.create so ugly? My vote goes to ES6 classes.
+  };
   thruObjectDotCreate();
 };
 learnAboutClassInheritance();
