@@ -585,4 +585,4 @@ const learnEncapsulation = function () {
   log(acc1.getMovements());
   Account.helper();
 };
-learnEncapsulation();
+// learnEncapsulation();
