@@ -586,3 +586,57 @@ const learnEncapsulation = function () {
   Account.helper();
 };
 // learnEncapsulation();
+
+/*
+ *
+ *
+ * Chaining Methods: map().filer().reduce()
+ *
+ *
+ */
+const learnAboutChaining = function () {
+  class Plant {
+    #isAdult;
+    #height;
+    #edible;
+    constructor(scientificName, color, edible, height) {
+      this.scientificName = scientificName;
+      this.color = color;
+      this.#edible = edible;
+      this.#height = height;
+    }
+    grow() {
+      log(`${this.scientificName} is now ${++this.#height}cm tall.`);
+      if (this.#height >= 10) this.#isAdult = true;
+      return this; // returning 'this' allows chainable methods
+    }
+    polinate() {
+      log(`An insect has polinated ${this.scientificName.toLowerCase()}.`);
+      if (this.#isAdult) this.#makeFruit();
+      return this;
+    }
+    #makeFruit() {
+      log(
+        `Humans ${this.#edible ? 'can' : 'must NOT'} eat fruit from ${
+          this.scientificName
+        }.`
+      );
+    }
+
+    static describe(Plant) {
+      log(
+        `${Plant.scientificName} is ${Plant.color} in color and ${
+          Plant.#height
+        }cm in height. It ${Plant.#edible ? 'is' : 'is NOT'} edible.`
+      );
+    }
+  }
+
+  const rose = new Plant('Rose', 'pink', true, 7);
+  const poisonIvy = new Plant('Poison Ivy', 'green', false, 9);
+
+  // rose.grow().grow().grow().grow().polinate();
+  // poisonIvy.polinate().polinate().grow().polinate();
+  Plant.describe(rose.grow().grow());
+};
+learnAboutChaining();
