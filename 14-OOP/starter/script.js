@@ -640,3 +640,53 @@ const learnAboutChaining = function () {
   Plant.describe(rose.grow().grow());
 };
 // learnAboutChaining();
+
+/*
+ *
+ *
+ * Coding Challenge #4: Implement Car and EV through ES6 classes
+ *
+ *
+ */
+const codingChallenge4 = function () {
+  class Car {
+    constructor(make, speed) {
+      this.make = make;
+      this.speed = speed;
+    }
+    brake() {
+      this.speed -= 5;
+      log(`${this.make} now going ${this.speed} km/h`);
+      return this;
+    }
+    accelerate() {
+      this.speed += 10;
+      log(`${this.make} now going ${this.speed} km/h`);
+      return this;
+    }
+  }
+
+  class EV extends Car {
+    #battery;
+    constructor(make, speed, battery) {
+      super(make, speed);
+      this.#battery = battery;
+    }
+    accelerate() {
+      this.speed += 10;
+      this.#battery -= 5;
+      log(`${this.make} now going ${this.speed} km/h`);
+      log(`${this.make} battery level now ${this.#battery}%`);
+      return this;
+    }
+    chargeBattery() {
+      this.#battery = 100;
+      log(`${this.make} battery level now ${this.#battery}%`);
+      return this;
+    }
+  }
+  const rivian = new EV('Rivian', 120, 23);
+  rivian.accelerate().brake().accelerate().chargeBattery();
+  log(rivian);
+};
+// codingChallenge4();
