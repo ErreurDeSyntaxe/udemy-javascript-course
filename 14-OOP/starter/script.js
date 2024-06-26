@@ -466,7 +466,7 @@ const learnAboutClassInheritance = function () {
     marc.study();
     marc.calcAge();
   };
-  thruES6Classes();
+  // thruES6Classes();
 
   /*
    * Inheritance Through Object.create
@@ -500,6 +500,89 @@ const learnAboutClassInheritance = function () {
 
     // Why is Object.create so ugly? My vote goes to ES6 classes.
   };
-  thruObjectDotCreate();
+  // thruObjectDotCreate();
 };
-learnAboutClassInheritance();
+// learnAboutClassInheritance();
+
+/*
+ *
+ *
+ * Encapsulation: Make methods & properties private to avoid bugs/hacks
+ *
+ *
+ */
+const learnEncapsulation = function () {
+  // 1. Public fields (public properties)
+  // 2. Private fields
+  // 3. Public methods
+  // 4. Private methods
+  // all of them have a static version
+
+  class Account {
+    // 1. Public fields (on instances)
+    locale = navigator.language;
+
+    // 2. Private fields (on instances)
+    #movements = [];
+    #pin; // must be declared outside the constructor
+
+    constructor(owner, currency, pin) {
+      this.owner = owner;
+      this.currency = currency;
+      // this._movements = []; // _ in front to make protected (semi private)
+      this.#pin = pin;
+      // this.locale = navigator.language;
+
+      log(`Thank you for opening an account, ${this.owner}.`);
+    }
+
+    // 3. Public methods
+    // Public Interface (API) (on the prototype)
+    getMovements() {
+      return this.#movements;
+    }
+    deposit(value) {
+      this.#movements.push(value);
+    }
+    withdraw(value) {
+      this.deposit(-value);
+    }
+    requestLoan(value) {
+      if (this.#approveLoan(1)) {
+        this.deposit(value);
+        log(`Loan approved`);
+      }
+    }
+    static helper() {
+      log('A (static) helper method is available on the class itself');
+      log('In the case of this class (Account) and this method (helper)');
+      log('It must be called through this syntax: Account.helper()');
+    }
+
+    // 4. Private methods
+    #approveLoan(value) {
+      // _ to protect the method
+      if (this.#pin !== value) return true;
+    }
+  }
+
+  const acc1 = new Account('Xavier', 'EUR', 1111);
+  log(acc1);
+
+  // not great to interact with properties directly
+  // better write methods to do it
+  // acc1._movements.push(250);
+  // acc1._movements.push(-100);
+
+  // this is better
+  acc1.deposit(1000);
+  acc1.withdraw(200);
+  acc1.requestLoan(10_000);
+  acc1.getMovements();
+
+  log(acc1);
+  // log(acc1.#movements); // doesn't work bc private (with the #)
+  log(acc1.getMovements());
+  Account.helper();
+};
+learnEncapsulation();
