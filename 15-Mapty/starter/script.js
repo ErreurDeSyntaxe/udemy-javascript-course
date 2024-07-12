@@ -38,4 +38,40 @@ const learnAboutGeolocation = function () {
       }
     );
 };
-learnAboutGeolocation();
+// learnAboutGeolocation();
+
+/*
+ *
+ *
+ * Leaflet Library: Third Party Library to display maps
+ *
+ *
+ */
+const learnAboutLeaflet = function () {
+  // review geolocation API
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
+      const coords = [position.coords.latitude, position.coords.longitude];
+      console.log(coords[0], coords[1]);
+
+      // learn Leaflet
+      // 'map' is a DOM element's ID
+      // 13 is the zoom level
+      const map = L.map('map').setView(coords, 13);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      L.marker(coords)
+        .addTo(map)
+        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+        .openPopup();
+    },
+    function () {
+      alert('We could not get your location');
+    }
+  );
+};
+learnAboutLeaflet();
