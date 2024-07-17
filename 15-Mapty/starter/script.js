@@ -57,6 +57,7 @@ const learnAboutLeaflet = function () {
       // learn Leaflet
       // 'map' is a DOM element's ID
       // 13 is the zoom level
+      // addEventLister on map
       const map = L.map('map').setView(coords, 13);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -64,10 +65,24 @@ const learnAboutLeaflet = function () {
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
+      // Leaflet's addEventListener
+      map.on('click', function (mapEvent) {
+        const { lat, lng } = mapEvent.latlng;
+
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent('Workout!')
+          .openPopup();
+      });
     },
     function () {
       alert('We could not get your location');
