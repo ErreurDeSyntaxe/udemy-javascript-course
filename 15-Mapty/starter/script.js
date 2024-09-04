@@ -14,7 +14,7 @@ const inputElevation = document.querySelector('.form__input--elevation');
 /*
  *
  *
- * Project Building
+ * Project Building: START
  *
  *
  */
@@ -37,6 +37,8 @@ class Workout {
  * Running: Child class
  */
 class Running extends Workout {
+  type = 'running';
+
   constructor(coords, distance, duration, cadence) {
     super(coords, distance, duration);
     this.cadence = cadence;
@@ -54,6 +56,8 @@ class Running extends Workout {
  * Cycling: Child class
  */
 class Cycling extends Workout {
+  type = 'cycling';
+
   constructor(coords, distance, duration, elevationGain) {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
@@ -79,6 +83,7 @@ setTimeout(() => {
 class App {
   #map;
   #mapEvent;
+  #workouts = [];
 
   constructor() {
     this._getPosition();
@@ -102,7 +107,7 @@ class App {
     const coords = [position.coords.latitude, position.coords.longitude];
     this.#map = L.map('map').setView(coords, 13);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
@@ -124,14 +129,66 @@ class App {
 
   _newWorkout(e) {
     e.preventDefault();
+
+    const validateInput = (...inputs) =>
+      inputs.every(input => Number.isFinite(input));
+
+    const checkPositive = (...inputs) => inputs.every(input => input > 0);
+
+    // Get data from form
+    const type = inputType.value;
+    const distance = +inputDistance.value;
+    const duration = +inputDuration.value;
+    const { lat, lng } = this.#mapEvent.latlng;
+    let workout;
+
+    // Create appropriate object
+    if (type === 'running') {
+      // Check data validity
+      const cadence = +inputCadence.value;
+      if (
+        !validateInput(distance, duration, cadence) ||
+        !checkPositive(distance, duration, cadence)
+      )
+        return alert('Inputs must be positive numbers!');
+
+      workout = new Running([lat, lng], distance, duration, cadence);
+    }
+
+    if (type === 'cycling') {
+      // Check data validity
+      const elevation = +inputElevation.value;
+      if (
+        !validateInput(distance, duration, elevation) ||
+        !checkPositive(distance, duration)
+      )
+        return alert(
+          'Distance and duration must be positive numbers! Elevation may be negative.'
+        );
+      workout = new Cycling([lat, lng], distance, duration, elevation);
+    }
+
+    // Add workout to array
+    this.#workouts.push(workout);
+    console.log(workout);
+    console.log(this.#workouts);
+
+    // Render workout on the map
+    this.renderWorkoutMarker(workout);
+
+    // Render work on the list
+
+    // Hide the form
+
     // Clear the form
     inputCadence.value = '';
     inputDistance.value = '';
     inputDuration.value = '';
     inputElevation.value = '';
+  }
 
-    const { lat, lng } = this.#mapEvent.latlng;
-    L.marker([lat, lng])
+  renderWorkoutMarker(workout) {
+    L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -139,21 +196,34 @@ class App {
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
-          className: 'running-popup',
+          className: `${workout.type}-popup`,
         })
       )
-      .setPopupContent('Workout!')
+      .setPopupContent(workout.distance + '')
       .openPopup();
   }
 }
 
 const app = new App();
+/*
+ *
+ *
+ * Project Building: END
+ *
+ *
+ */
 
 /*
  *
  *
- * Geolocation API: Very basics of the API
+ * Learning Section: Geolocation, Leaflet, Form
  *
+ *
+ */
+
+/*
+ *
+ * Geolocation API: Very basics of the API
  *
  */
 const learnAboutGeolocation = function () {
@@ -180,9 +250,7 @@ const learnAboutGeolocation = function () {
 
 /*
  *
- *
  * Leaflet Library: Third Party Library to display maps
- *
  *
  */
 const learnAboutLeaflet = function () {
@@ -231,9 +299,7 @@ const learnAboutLeaflet = function () {
 
 /*
  *
- *
  * Popup Form
- *
  *
  */
 const displayPopupForm = function () {
