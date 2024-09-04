@@ -22,6 +22,7 @@ const inputElevation = document.querySelector('.form__input--elevation');
 class Workout {
   date = new Date();
   id = (Date.now() + '').slice(-10);
+  clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
@@ -47,6 +48,10 @@ class Workout {
     this.description = `${this.type[0].toUpperCase() + this.type.slice(1)} on ${
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
+  }
+
+  countClicks() {
+    this.clicks++;
   }
 }
 
@@ -89,19 +94,13 @@ class Cycling extends Workout {
   }
 }
 
-const run1 = new Running([39, -12], 5.2, 24, 178);
-// setTimeout so the IDs are different
-setTimeout(() => {
-  const bike1 = new Cycling([39, -12], 27, 95, 523);
-  console.log(run1, bike1);
-}, 10);
-
 /*
  * The Application: The map, the events (click & submit)
  */
 class App {
   #map;
   #mapEvent;
+  #mapZoomLevel = 13;
   #workouts = [];
 
   constructor() {
@@ -110,6 +109,7 @@ class App {
 
     // Respond to form select field
     inputType.addEventListener('change', this._toggleElevationField);
+    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
 
   _getPosition() {
@@ -124,7 +124,7 @@ class App {
 
   _loadMap(position) {
     const coords = [position.coords.latitude, position.coords.longitude];
-    this.#map = L.map('map').setView(coords, 13);
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
     L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
@@ -274,8 +274,24 @@ class App {
       </div>`;
 
     html += '</li>';
-
     form.insertAdjacentHTML('afterend', html);
+  }
+
+  _moveToPopup(e) {
+    const workoutEl = e.target.closest('.workout');
+    if (!workoutEl) return;
+
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id
+    );
+
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+      animate: true,
+      pan: { duration: 1 },
+    });
+
+    workout.countClicks();
+    console.log(workout);
   }
 }
 
