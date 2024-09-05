@@ -284,18 +284,21 @@ class App {
       </div>
       `;
 
-    html += '<div class="btn-delete">Delete</div></li>';
+    html += `
+        <div class="btn-delete">Delete</div>
+        <div class="btn-edit">Edit</div>
+      </li >`;
     form.insertAdjacentHTML('afterend', html);
   }
 
-  _deleteWorkout(unwantedEL, unwantedObject) {
+  _deleteWorkout(unwantedEL, unwantedObj) {
     // remove from DOM
     containerWorkouts
       .querySelector(`[data-id="${unwantedEL.dataset.id}"]`)
       .remove();
 
     // remove from array
-    const indexOfUnwated = this.#workouts.indexOf(unwantedObject);
+    const indexOfUnwated = this.#workouts.indexOf(unwantedObj);
     this.#workouts.splice(indexOfUnwated, 1);
 
     // remove from map
@@ -303,6 +306,16 @@ class App {
 
     // update local storage
     this._setLocalStorage();
+  }
+
+  _editWorkout(editEl, editObj) {
+    console.log(this.#workouts);
+    const indexOfEdited = this.#workouts.indexOf(editObj);
+    console.log(indexOfEdited);
+
+    const workoutFields = editEl.querySelectorAll('.workout__value');
+    console.log(workoutFields);
+    workoutFields[0].textContent = prompt('Input new distance');
   }
 
   _moveToPopup(e) {
@@ -317,6 +330,12 @@ class App {
     // if the 'delete' button was clicked rather than the 'body'
     if (e.target.classList.contains('btn-delete')) {
       this._deleteWorkout(workoutEl, workout);
+      return;
+    }
+
+    // if the 'edit' button was clicked rather than the 'body'
+    if (e.target.classList.contains('btn-edit')) {
+      this._editWorkout(workoutEl, workout);
       return;
     }
 
