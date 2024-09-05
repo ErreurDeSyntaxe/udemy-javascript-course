@@ -102,6 +102,7 @@ class App {
   #mapEvent;
   #mapZoomLevel = 13;
   #workouts = [];
+  #workoutMarkers = [];
 
   constructor() {
     // Get user's position
@@ -206,8 +207,6 @@ class App {
 
     // Add workout to array
     this.#workouts.push(workout);
-    console.log(workout);
-    console.log(this.#workouts);
 
     // Render workout on the map
     this._renderWorkoutMarker(workout);
@@ -223,7 +222,7 @@ class App {
   }
 
   _renderWorkoutMarker(workout) {
-    L.marker(workout.coords)
+    const newMarker = L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -238,6 +237,7 @@ class App {
         `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
       )
       .openPopup();
+    this.#workoutMarkers.push(newMarker);
   }
 
   _renderWorkout(workout) {
@@ -281,27 +281,52 @@ class App {
         <span class="workout__icon">⛰</span>
         <span class="workout__value">${workout.elevationGain}</span>
         <span class="workout__unit">m</span>
-      </div>`;
+      </div>
+      `;
 
-    html += '</li>';
+    html += '<div class="btn-delete">Delete</div></li>';
     form.insertAdjacentHTML('afterend', html);
+  }
+
+  _deleteWorkout(unwantedEL, unwantedObject) {
+    // remove from DOM
+    containerWorkouts
+      .querySelector(`[data-id="${unwantedEL.dataset.id}"]`)
+      .remove();
+
+    // remove from array
+    const indexOfUnwated = this.#workouts.indexOf(unwantedObject);
+    this.#workouts.splice(indexOfUnwated, 1);
+
+    // remove from map
+    console.log("I don't know how to do that");
+
+    // update local storage
+    this._setLocalStorage();
   }
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
     if (!workoutEl) return;
 
+    // find the workout that was clicked on
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
 
+    // if the 'delete' button was clicked rather than the 'body'
+    if (e.target.classList.contains('btn-delete')) {
+      this._deleteWorkout(workoutEl, workout);
+      return;
+    }
+
+    // if the workout was selected rather that deleted, pan to it
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: { duration: 1 },
     });
 
     // workout.countClicks();
-    console.log(workout);
   }
   _setLocalStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
