@@ -104,10 +104,14 @@ class App {
   #workouts = [];
 
   constructor() {
+    // Get user's position
     this._getPosition();
-    form.addEventListener('submit', this._newWorkout.bind(this));
 
-    // Respond to form select field
+    // Get data from local storage
+    this._getLocalStorage();
+
+    // Attach event handlers
+    form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
@@ -133,6 +137,9 @@ class App {
 
     // Handle clicks on the map
     this.#map.on('click', this._showForm.bind(this));
+
+    // Render local storage markers
+    this.#workouts.forEach(workout => this._renderWorkoutMarker(workout));
   }
 
   _showForm(mapE) {
@@ -210,6 +217,9 @@ class App {
 
     // Hide the form and clear it
     this._hideForm();
+
+    // Save workout to local storage
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -290,8 +300,28 @@ class App {
       pan: { duration: 1 },
     });
 
-    workout.countClicks();
+    // workout.countClicks();
     console.log(workout);
+  }
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    if (!data) return;
+    // data read from local storage does NOT inheritance the prototype chain
+    // unline the objects created in the original run of the program
+    // countClicks() doesn't work anymore because it was inherited (and lost)
+
+    this.#workouts = data;
+    this.#workouts.forEach(workout => {
+      this._renderWorkout(workout);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
