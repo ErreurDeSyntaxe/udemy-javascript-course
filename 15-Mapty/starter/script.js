@@ -309,13 +309,15 @@ class App {
   }
 
   _editWorkout(editEl, editObj) {
-    console.log(this.#workouts);
-    const indexOfEdited = this.#workouts.indexOf(editObj);
-    console.log(indexOfEdited);
+    const newDistance = prompt('Input new distance');
 
+    // update the workout object in the array
+    const indexOfEdited = this.#workouts.indexOf(editObj);
+    this.#workouts[indexOfEdited].distance = newDistance;
+
+    // update the UI
     const workoutFields = editEl.querySelectorAll('.workout__value');
-    console.log(workoutFields);
-    workoutFields[0].textContent = prompt('Input new distance');
+    workoutFields[0].textContent = newDistance;
   }
 
   _moveToPopup(e) {
