@@ -6,31 +6,36 @@ const countriesContainer = document.querySelector('.countries');
 /*
  *
  *
- * Project Section: Start
+ * Learning Section: Asynchronous JS, Promises, Async/Await, AJAX, APIs
  *
  *
  */
 
-const oldSchoolXMLrequests = function () {
-  const getCountryData = function (countryName) {
-    const request = new XMLHttpRequest();
-    request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`); // async
-    request.send(); // async
-    request.addEventListener('load', function () {
-      const [data] = JSON.parse(this.responseText);
+// course update: the API changed its URL
 
-      let languages = '';
-      for (const [langCode, langName] of Object.entries(data.languages)) {
-        languages += `${langName} & `;
-      }
-      languages = languages.slice(0, -3);
+/*
+ * Callback Hell:
+ */
+const getCountryAndNeighbors = function (countryName) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`); // async
+  request.send(); // async
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
 
-      let currencies = '';
-      for (const [curCode, curName] of Object.entries(data.currencies)) {
-        currencies += `${curName.name}`;
-      }
+    let languages = '';
+    for (const [langCode, langName] of Object.entries(data.languages)) {
+      languages += `${langName} & `;
+    }
+    languages = languages.slice(0, -3);
 
-      const html = `
+    let currencies = '';
+    for (const [curCode, curName] of Object.entries(data.currencies)) {
+      currencies += `${curName.name}`;
+    }
+
+    const html = `
       <article class="country">
         <img class="country__img" src="${data.flags.svg}"/>
         <div class="country__data">
@@ -44,33 +49,53 @@ const oldSchoolXMLrequests = function () {
         </div>
       </article>`;
 
-      countriesContainer.style.opacity = 1;
-      countriesContainer.insertAdjacentHTML('beforeend', html);
-    });
-  };
-  getCountryData('taiwan');
-  getCountryData('canada');
+    countriesContainer.style.opacity = 1;
+    countriesContainer.insertAdjacentHTML('beforeend', html);
+  });
 };
-oldSchoolXMLrequests();
+getCountryAndNeighbors('usa');
 
 /*
- *
- *
- * Project Section: End
- *
- *
+ * XML Requests: The Basics
  */
+const getCountryData = function (countryName) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`); // async
+  request.send(); // async
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
 
-/*
- *
- *
- * Learning Section: Asynchronous JS, Promises, Async/Await, AJAX, APIs
- *
- *
- */
+    let languages = '';
+    for (const [langCode, langName] of Object.entries(data.languages)) {
+      languages += `${langName} & `;
+    }
+    languages = languages.slice(0, -3);
 
-// course update: the API changed its URL
-// https://countries-api-836d.onrender.com/countries/
+    let currencies = '';
+    for (const [curCode, curName] of Object.entries(data.currencies)) {
+      currencies += `${curName.name}`;
+    }
+
+    const html = `
+      <article class="country">
+        <img class="country__img" src="${data.flags.svg}"/>
+        <div class="country__data">
+          <h3 class="country__name">${data.name.common}</h3>
+          <h4 class="country__region">${data.region}</h4>
+          <p class="country__row"><span>👫</span>${(
+            +data.population / 1_000_000
+          ).toFixed(1)} M people</p>
+          <p class="country__row"><span>🗣️</span>${languages}</p>
+          <p class="country__row"><span>💰</span>${currencies}</p>
+        </div>
+      </article>`;
+
+    countriesContainer.style.opacity = 1;
+    countriesContainer.insertAdjacentHTML('beforeend', html);
+  });
+};
+// getCountryData('taiwan');
+// getCountryData('canada');
 
 /*
  * Synchronous vs Asynchronous
