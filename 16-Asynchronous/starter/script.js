@@ -16,27 +16,21 @@ const countriesContainer = document.querySelector('.countries');
 /*
  * Callback Hell:
  */
-const getCountryAndNeighbors = function (countryName) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`); // async
-  request.send(); // async
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
+const renderCountry = function (data, className = '') {
+  let languages = '';
+  for (const [langCode, langName] of Object.entries(data.languages)) {
+    languages += `${langName} & `;
+  }
+  languages = languages.slice(0, -3);
 
-    let languages = '';
-    for (const [langCode, langName] of Object.entries(data.languages)) {
-      languages += `${langName} & `;
-    }
-    languages = languages.slice(0, -3);
+  let currencies = '';
+  for (const [curCode, curName] of Object.entries(data.currencies)) {
+    currencies += `${curName.name}`;
+  }
+  console.log(data?.borders);
 
-    let currencies = '';
-    for (const [curCode, curName] of Object.entries(data.currencies)) {
-      currencies += `${curName.name}`;
-    }
-
-    const html = `
-      <article class="country">
+  const html = `
+      <article class="country ${className}">
         <img class="country__img" src="${data.flags.svg}"/>
         <div class="country__data">
           <h3 class="country__name">${data.name.common}</h3>
@@ -49,8 +43,36 @@ const getCountryAndNeighbors = function (countryName) {
         </div>
       </article>`;
 
-    countriesContainer.style.opacity = 1;
-    countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+};
+
+const getCountryAndNeighbors = function (countryName) {
+  // AJAX call for country 1
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`); // async
+  request.send(); // async
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+
+    // Render country 1
+    renderCountry(data);
+
+    // Get the first neighbor
+    const neighbor = data?.borders?.[0];
+    if (!neighbor) return;
+    console.log(neighbor);
+
+    // AJAX call for country 2
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbor}`); // async
+    request2.send(); // async
+    request2.addEventListener('load', function () {
+      const [data2] = JSON.parse(this.responseText);
+      console.log(data2);
+      renderCountry(data2, 'neighbour');
+    });
   });
 };
 getCountryAndNeighbors('usa');
