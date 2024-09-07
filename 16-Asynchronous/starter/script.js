@@ -60,22 +60,24 @@ const getCountryAndNeighbors = function (countryName) {
     renderCountry(data);
 
     // Get the first neighbor
-    const neighbor = data?.borders?.[0];
-    if (!neighbor) return;
-    console.log(neighbor);
+    const neighbors = data?.borders;
+    if (!neighbors) return;
+    console.log(neighbors);
 
-    // AJAX call for country 2
-    const request2 = new XMLHttpRequest();
-    request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbor}`); // async
-    request2.send(); // async
-    request2.addEventListener('load', function () {
-      const [data2] = JSON.parse(this.responseText);
-      console.log(data2);
-      renderCountry(data2, 'neighbour');
+    neighbors.forEach(neighbor => {
+      // AJAX call for country 2
+      const request2 = new XMLHttpRequest();
+      request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbor}`); // async
+      request2.send(); // async
+      request2.addEventListener('load', function () {
+        const [data2] = JSON.parse(this.responseText);
+        console.log(data2);
+        renderCountry(data2, 'neighbour');
+      });
     });
   });
 };
-getCountryAndNeighbors('usa');
+getCountryAndNeighbors('germany');
 
 /*
  * XML Requests: The Basics
