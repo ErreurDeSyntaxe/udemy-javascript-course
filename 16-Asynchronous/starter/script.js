@@ -60,10 +60,11 @@ const getCountryAndNeighbors = function (countryName) {
     renderCountry(data);
 
     // Get the first neighbor
-    const neighbors = data?.borders;
+    let neighbors = data?.borders?.[0]; // limit to just one neighbor
     if (!neighbors) return;
     console.log(neighbors);
 
+    neighbors = [neighbors]; // limiti to just one neighbor
     neighbors.forEach(neighbor => {
       // AJAX call for country 2
       const request2 = new XMLHttpRequest();
