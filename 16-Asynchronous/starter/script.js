@@ -14,6 +14,26 @@ const countriesContainer = document.querySelector('.countries');
 // course update: the API changed its URL
 
 /*
+ * Promises: A way to escape callback hell
+ */
+const learnAboutPromises = function () {
+  // how it used to be done
+  // const request = new XMLHttpRequest();
+  // request.open('GET', `https://restcountries.com/v3.1/name/portugal`);
+  // request.send();
+  // request.addEventListener('load', function () {
+  //   console.log('async JS');
+  // });
+
+  const request = fetch('https://restcountries.com/v3.1/name/portugal');
+  console.log(request); // fetch immediately store the promise in the var
+  setTimeout(function () {
+    console.log(request);
+  }, 5000); // later, the promise is settled (either fulfilled or rejected)
+};
+learnAboutPromises();
+
+/*
  * Callback Hell:
  */
 const renderCountry = function (data, className = '') {
@@ -78,7 +98,7 @@ const getCountryAndNeighbors = function (countryName) {
     });
   });
 };
-getCountryAndNeighbors('germany');
+// getCountryAndNeighbors('germany');
 
 /*
  * XML Requests: The Basics
