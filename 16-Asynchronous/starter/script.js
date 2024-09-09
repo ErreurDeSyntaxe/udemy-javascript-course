@@ -14,6 +14,16 @@ const countriesContainer = document.querySelector('.countries');
 // course update: the API changed its URL
 
 /*
+ * Get country data with promises
+ */
+const getCountryDataPromise = function (countryName) {
+  const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+// getCountryDataPromise('canada');
+
+/*
  * Promises: A way to escape callback hell
  */
 const learnAboutPromises = function () {
@@ -31,7 +41,7 @@ const learnAboutPromises = function () {
     console.log(request);
   }, 5000); // later, the promise is settled (either fulfilled or rejected)
 };
-learnAboutPromises();
+// learnAboutPromises();
 
 /*
  * Callback Hell:
