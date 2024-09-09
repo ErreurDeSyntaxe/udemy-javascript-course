@@ -121,7 +121,7 @@ const sequentialAJAX = function (countryName) {
   // chained promises are flat. their indentation is the same
   // it's easier to reason and fix/add to
 };
-sequentialAJAX('uganda');
+// sequentialAJAX('uganda');
 
 /*
  * Promises: Rendering one country with promises instead of XMLHttpRequest
