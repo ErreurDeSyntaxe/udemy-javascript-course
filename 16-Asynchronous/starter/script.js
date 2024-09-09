@@ -17,7 +17,7 @@ const countriesContainer = document.querySelector('.countries');
  * Get country data with promises
  */
 const getCountryDataPromise = function (countryName) {
-  const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+  fetch(`https://restcountries.com/v3.1/name/${countryName}`)
     .then(response => response.json())
     .then(data => renderCountry(data[0]));
 };
