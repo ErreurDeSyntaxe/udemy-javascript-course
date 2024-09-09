@@ -14,37 +14,7 @@ const countriesContainer = document.querySelector('.countries');
 // course update: the API changed its URL
 
 /*
- * Get country data with promises
- */
-const getCountryDataPromise = function (countryName) {
-  fetch(`https://restcountries.com/v3.1/name/${countryName}`)
-    .then(response => response.json())
-    .then(data => renderCountry(data[0]));
-};
-// getCountryDataPromise('canada');
-
-/*
- * Promises: A way to escape callback hell
- */
-const learnAboutPromises = function () {
-  // how it used to be done
-  // const request = new XMLHttpRequest();
-  // request.open('GET', `https://restcountries.com/v3.1/name/portugal`);
-  // request.send();
-  // request.addEventListener('load', function () {
-  //   console.log('async JS');
-  // });
-
-  const request = fetch('https://restcountries.com/v3.1/name/portugal');
-  console.log(request); // fetch immediately store the promise in the var
-  setTimeout(function () {
-    console.log(request);
-  }, 5000); // later, the promise is settled (either fulfilled or rejected)
-};
-// learnAboutPromises();
-
-/*
- * Callback Hell:
+ * renderCountry function [NEEDED FOR THE WHOLE SECTION]
  */
 const renderCountry = function (data, className = '') {
   let languages = '';
@@ -77,7 +47,11 @@ const renderCountry = function (data, className = '') {
   countriesContainer.insertAdjacentHTML('beforeend', html);
 };
 
-const getCountryAndNeighbors = function (countryName) {
+/*
+ * renderCountryAndNeighbor function
+ * [DEMO CALLBACK HELL, where callbacks are nested deeply into callbacks]
+ */
+const renderCountryAndNeighbor = function (countryName) {
   // AJAX call for country 1
   const request = new XMLHttpRequest();
   request.open('GET', `https://restcountries.com/v3.1/name/${countryName}`); // async
@@ -108,10 +82,79 @@ const getCountryAndNeighbors = function (countryName) {
     });
   });
 };
-// getCountryAndNeighbors('germany');
+// renderCountryAndNeighbor('germany');
 
 /*
- * XML Requests: The Basics
+ * Sequential AJAX calls with Promises
+ */
+const sequentialAJAX = function (countryName) {
+  fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbor = data[0]?.borders?.[0];
+
+      if (!neighbor) return;
+
+      // neighboring country
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0], 'neighbour');
+      const neighbor = data[0]?.borders?.[2];
+
+      if (!neighbor) return;
+
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    })
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0], 'neighbour');
+      const neighbor = data[0]?.borders?.[1];
+
+      if (!neighbor) return;
+
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    });
+  // instead of creating a triangle (indicating callback hell),
+  // chained promises are flat. their indentation is the same
+  // it's easier to reason and fix/add to
+};
+sequentialAJAX('uganda');
+
+/*
+ * Promises: Rendering one country with promises instead of XMLHttpRequest
+ */
+const getCountryDataPromise = function (countryName) {
+  fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+// getCountryDataPromise('canada');
+
+/*
+ * Promises: A way to escape callback hell
+ */
+const learnAboutPromises = function () {
+  // how it used to be done
+  // const request = new XMLHttpRequest();
+  // request.open('GET', `https://restcountries.com/v3.1/name/portugal`);
+  // request.send();
+  // request.addEventListener('load', function () {
+  //   console.log('async JS');
+  // });
+
+  const request = fetch('https://restcountries.com/v3.1/name/portugal');
+  console.log(request); // fetch immediately store the promise in the var
+  setTimeout(function () {
+    console.log(request);
+  }, 5000); // later, the promise is settled (either fulfilled or rejected)
+};
+// learnAboutPromises();
+
+/*
+ * XML Requests: The Basics of the Old School
  */
 const getCountryData = function (countryName) {
   const request = new XMLHttpRequest();
