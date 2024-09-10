@@ -98,7 +98,15 @@ const renderCountryAndNeighbor = function (countryName) {
 const sequentialAJAX = function (countryName) {
   fetch(`https://restcountries.com/v3.1/name/${countryName}`)
     .then(
-      response => response.json() /*,
+      response => {
+        console.log(response);
+
+        if (!response.ok) {
+          throw new Error(`Country not found (${response.status})`);
+        }
+
+        return response.json();
+      } /*,
       err => alert(err) // catching the possible error*/
     )
     .then(data => {
@@ -140,8 +148,9 @@ const sequentialAJAX = function (countryName) {
  * Simulate loss of internet connexion
  */
 btn.addEventListener('click', function () {
-  sequentialAJAX('bolivia');
+  sequentialAJAX('malaysia');
 });
+sequentialAJAX('asdasd');
 
 /*
  * Promises: Rendering one country with promises instead of XMLHttpRequest
