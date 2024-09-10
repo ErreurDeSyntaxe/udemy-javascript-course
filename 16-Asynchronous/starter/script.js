@@ -107,21 +107,24 @@ const sequentialAJAX = function (countryName) {
       if (!neighbor) return;
 
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
-    })
-    .then(response => response.json())
-    .then(data => {
-      renderCountry(data[0], 'neighbour');
-      const neighbor = data[0]?.borders?.[1];
-
-      if (!neighbor) return;
-
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
     });
+  // .then(response => response.json())
+  // .then(data => {
+  //   renderCountry(data[0], 'neighbour');
+  //   const neighbor = data[0]?.borders?.[1];
+
+  //   if (!neighbor) return;
+
+  //   return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+  // });
   // instead of creating a triangle (indicating callback hell),
   // chained promises are flat. their indentation is the same
   // it's easier to reason and fix/add to
 };
-// sequentialAJAX('uganda');
+
+btn.addEventListener('click', function () {
+  sequentialAJAX('vietnam');
+});
 
 /*
  * Promises: Rendering one country with promises instead of XMLHttpRequest
