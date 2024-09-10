@@ -14,6 +14,14 @@ const countriesContainer = document.querySelector('.countries');
 // course update: the API changed its URL
 
 /*
+ * Display a message for the user to explain the error
+ */
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  // countriesContainer.style.opacity = 1;
+};
+
+/*
  * renderCountry function [NEEDED FOR THE WHOLE SECTION]
  */
 const renderCountry = function (data, className = '') {
@@ -43,7 +51,7 @@ const renderCountry = function (data, className = '') {
         </div>
       </article>`;
 
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
   countriesContainer.insertAdjacentHTML('beforeend', html);
 };
 
@@ -85,11 +93,14 @@ const renderCountryAndNeighbor = function (countryName) {
 // renderCountryAndNeighbor('germany');
 
 /*
- * Sequential AJAX calls with Promises
+ * Sequential AJAX calls with Promises & Error Handling (catching)
  */
 const sequentialAJAX = function (countryName) {
   fetch(`https://restcountries.com/v3.1/name/${countryName}`)
-    .then(response => response.json())
+    .then(
+      response => response.json() /*,
+      err => alert(err) // catching the possible error*/
+    )
     .then(data => {
       renderCountry(data[0]);
       const neighbor = data[0]?.borders?.[0];
@@ -99,14 +110,17 @@ const sequentialAJAX = function (countryName) {
       // neighboring country
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
     })
-    .then(response => response.json())
-    .then(data => {
-      renderCountry(data[0], 'neighbour');
-      const neighbor = data[0]?.borders?.[2];
-
-      if (!neighbor) return;
-
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    .then(
+      response => response.json() /*,
+      err => alert(err) // catching again, breaking the DRY principle */
+    )
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.error(`${err} 💥💥💥`);
+      renderError(`Something went wrong 💥 ${err.message}. Try again.`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
     });
   // .then(response => response.json())
   // .then(data => {
@@ -122,8 +136,11 @@ const sequentialAJAX = function (countryName) {
   // it's easier to reason and fix/add to
 };
 
+/*
+ * Simulate loss of internet connexion
+ */
 btn.addEventListener('click', function () {
-  sequentialAJAX('vietnam');
+  sequentialAJAX('bolivia');
 });
 
 /*
