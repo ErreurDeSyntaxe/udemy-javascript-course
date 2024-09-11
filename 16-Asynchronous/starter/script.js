@@ -35,7 +35,6 @@ const renderCountry = function (data, className = '') {
   for (const [curCode, curName] of Object.entries(data.currencies)) {
     currencies += `${curName.name}`;
   }
-  console.log(data?.borders);
 
   const html = `
       <article class="country ${className}">
@@ -93,22 +92,58 @@ const renderCountryAndNeighbor = function (countryName) {
 // renderCountryAndNeighbor('germany');
 
 /*
+ * getJSON: fetch, then, catch, handle (all in one)
+ */
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+
+    return response.json();
+  });
+};
+
+/*
  * Sequential AJAX calls with Promises & Error Handling (catching)
  */
 const sequentialAJAX = function (countryName) {
+  getJSON(
+    `https://restcountries.com/v3.1/name/${countryName}`,
+    `Country (${countryName}) not found`
+  )
+    .then(data => {
+      console.log(data);
+      renderCountry(data[0]);
+      const neighbor = data[0]?.borders?.[0];
+
+      if (!neighbor) throw new Error('No neighbor found');
+
+      return getJSON(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    })
+    .then(data => {
+      renderCountry(data[0], 'neighbour');
+    })
+    .catch(err => {
+      console.error(`${err} 💥💥💥`);
+      renderError(`Something went wrong 💥💥 ${err.message}. Try again!`);
+    })
+    .finally((countriesContainer.style.opacity = 1));
+
+  /*
+  OLD CODE: NOW THE HANDLING OF FETCH/CATCH IS EXPORTED TO getJSON
+  OLD CODE: NOW THE HANDLING OF FETCH/CATCH IS EXPORTED TO getJSON
+  OLD CODE: NOW THE HANDLING OF FETCH/CATCH IS EXPORTED TO getJSON
   fetch(`https://restcountries.com/v3.1/name/${countryName}`)
-    .then(
-      response => {
-        console.log(response);
+    .then(response => {
+      console.log(response);
 
-        if (!response.ok) {
-          throw new Error(`Country not found (${response.status})`);
-        }
+      if (!response.ok) {
+        throw new Error(
+          `Country (${countryName}) not found (${response.status})`
+        );
+      }
 
-        return response.json();
-      } /*,
-      err => alert(err) // catching the possible error*/
-    )
+      return response.json();
+    })
     .then(data => {
       renderCountry(data[0]);
       const neighbor = data[0]?.borders?.[0];
@@ -118,10 +153,7 @@ const sequentialAJAX = function (countryName) {
       // neighboring country
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
     })
-    .then(
-      response => response.json() /*,
-      err => alert(err) // catching again, breaking the DRY principle */
-    )
+    .then(response => response.json())
     .then(data => renderCountry(data[0], 'neighbour'))
     .catch(err => {
       console.error(`${err} 💥💥💥`);
@@ -130,13 +162,12 @@ const sequentialAJAX = function (countryName) {
     .finally(() => {
       countriesContainer.style.opacity = 1;
     });
+    */
   // .then(response => response.json())
   // .then(data => {
   //   renderCountry(data[0], 'neighbour');
   //   const neighbor = data[0]?.borders?.[1];
-
   //   if (!neighbor) return;
-
   //   return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
   // });
   // instead of creating a triangle (indicating callback hell),
@@ -148,9 +179,8 @@ const sequentialAJAX = function (countryName) {
  * Simulate loss of internet connexion
  */
 btn.addEventListener('click', function () {
-  sequentialAJAX('malaysia');
+  sequentialAJAX('taiwan');
 });
-sequentialAJAX('asdasd');
 
 /*
  * Promises: Rendering one country with promises instead of XMLHttpRequest
