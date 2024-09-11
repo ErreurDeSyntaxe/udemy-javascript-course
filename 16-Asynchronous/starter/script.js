@@ -271,3 +271,58 @@ const learnAboutSynchronous = function () {
   // this action is synchronous. event listeners are NOT async
 };
 // learnAboutSynchronous();
+
+/*
+ * Coding Challenge 1: Reverse Geocoding
+ */
+const challenge1 = function () {
+  const delegatedFetch = function (url, errorMsg = 'There was an error') {
+    // was missing 'return'
+    return fetch(url).then(response => {
+      if (!response.ok) throw new Error('Problem with geocoding API');
+      console.log(response);
+      return response.json();
+    });
+  };
+
+  const whereAmI = function (lat, lng) {
+    console.log(`latitude: ${lat}, longitude: ${lng}`);
+    delegatedFetch(
+      `https://geocode.xyz/${lat},${lng}?geoit=json`,
+      'Coordinates not found'
+    )
+      .then(data => {
+        if (data?.error?.code === '018')
+          throw new Error('Could not find a city at these coordinates');
+        if (data.city === 'Throttled! See geocode.xyz/pricing')
+          throw new Error('You are making too many requests');
+        console.log(`You are in ${data.city}, ${data.country}`);
+
+        return fetch(`https://restcountries.com/v3.1/name/${data.country}`)
+          .then(response => {
+            if (!response.ok) throw new Error('Country not found');
+
+            return response.json();
+          })
+          .then(data => {
+            renderCountry(data[0]);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+        renderError(err.message);
+      })
+      .finally(() => {
+        countriesContainer.style.opacity = 1;
+      });
+  };
+
+  // whereAmI(22.6273, 120.3014);
+  // whereAmI(52.508, 13.381);
+  // whereAmI(19.037, 72.873);
+  // whereAmI(-33.933, 18.474);
+  navigator.geolocation.getCurrentPosition(geoObject =>
+    whereAmI(geoObject.coords.latitude, geoObject.coords.longitude)
+  );
+};
+challenge1();
