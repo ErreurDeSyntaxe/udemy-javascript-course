@@ -325,4 +325,27 @@ const challenge1 = function () {
     whereAmI(geoObject.coords.latitude, geoObject.coords.longitude)
   );
 };
-challenge1();
+// challenge1();
+
+/*
+ * Event Loop Practice: JavaScript timers are NOT reliable
+ */
+const eventLoopPractice = function () {
+  // top-level code executed first: 1
+  console.log('Test Start');
+  // callbacks in the queue executed last: 5
+  setTimeout(() => console.log('0-second timer'), 0);
+  // micro-tasks executed second: 3
+  Promise.resolve('Resolved promise 1').then(res => console.log(res));
+  // micro-tasks executed second: 4
+  Promise.resolve('Resolved promise 2').then(res => {
+    for (let i = -1_000_000_00; i < 1_000_000_000; i++) {
+      const x = 1;
+    }
+    // 4 (because it's part of micro-tast executed second: 4)
+    console.log(res);
+  });
+  // top-level code executed first: 2
+  console.log('Test End');
+};
+eventLoopPractice();
