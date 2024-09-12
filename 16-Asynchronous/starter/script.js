@@ -385,3 +385,56 @@ const buildPromise2 = function () {
     .then(res => console.log(`I waited ${res} seconds more`));
 };
 // buildPromise2();
+
+/*
+ * Promisify Geolocation
+ */
+const promisifyGeolocation = function () {
+  function newWhereAmI() {
+    getPosition()
+      .then(pos => {
+        const { latitude: lat, longitude: lng } = pos.coords;
+        return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Problem with geocoding');
+        return res.json();
+      })
+      .then(data => {
+        console.log(data);
+        console.log(`You are in ${data.city}, ${data.country}`);
+
+        return fetch(`https://restcountries.com/v3.1/name/${data.country}`)
+          .then(response => {
+            if (!response.ok) throw new Error('Country not found');
+
+            return response.json();
+          })
+          .then(data => {
+            renderCountry(data[0]);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+        renderError(err.message);
+      })
+      .finally(() => {
+        countriesContainer.style.opacity = 1;
+      });
+  }
+  newWhereAmI();
+
+  // returns the geoLocation Object
+  function getPosition() {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(
+        position => resolve(position),
+        err => reject(err)
+      );
+      // three lines above equal one line below
+      // navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  }
+  // getPosition().then(pos => console.log(pos));
+};
+promisifyGeolocation();
