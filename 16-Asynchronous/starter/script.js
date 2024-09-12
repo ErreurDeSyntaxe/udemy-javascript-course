@@ -348,4 +348,40 @@ const eventLoopPractice = function () {
   // top-level code executed first: 2
   console.log('Test End');
 };
-eventLoopPractice();
+// eventLoopPractice();
+
+/*
+ * Building a Promise
+ */
+const buildPromise1 = function () {
+  const lotteryPromise = new Promise(function (resolve, reject) {
+    console.log('Lottery being drawn');
+    setTimeout(() => {
+      if (Math.random() >= 0.5) {
+        resolve('You win! 💰💰💰');
+      } else {
+        reject(new Error('You lose... 💩'));
+      }
+    }, 1500);
+  });
+  lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+};
+// buildPromise1();
+
+/*
+ * Promisifying setTimeout
+ */
+const buildPromise2 = function () {
+  const wait = function (seconds) {
+    return new Promise(function (resolve) {
+      setTimeout(() => resolve(seconds), seconds * 1000);
+    });
+  };
+  wait(1.5)
+    .then(res => {
+      console.log(`I waited ${res} seconds`);
+      return wait(1);
+    })
+    .then(res => console.log(`I waited ${res} seconds more`));
+};
+// buildPromise2();
