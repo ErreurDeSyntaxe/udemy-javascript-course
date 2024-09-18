@@ -437,4 +437,152 @@ const promisifyGeolocation = function () {
   }
   // getPosition().then(pos => console.log(pos));
 };
-promisifyGeolocation();
+// promisifyGeolocation();
+
+/*
+ * Coding Challenge 2
+ */
+const challenge2 = function () {
+  btn.style.display = 'none';
+  const imagesContainer = document.querySelector('.images');
+  let img = document.createElement('img');
+
+  function waitTwoS() {
+    return new Promise(function (resolve) {
+      setTimeout(() => resolve('2 seconds'), 2000);
+    });
+  }
+
+  function createImage(imgPath) {
+    // Promise takes exactly one argument: the executor function
+    // the executor function takes two arguments: resolve & reject FUNCTIONS
+    return new Promise(function (resolve, reject) {
+      img.src = imgPath;
+      img.addEventListener('load', () => {
+        imagesContainer.appendChild(img);
+        resolve(img);
+      });
+      img.addEventListener('error', () =>
+        reject(new Error('Error loading image'))
+      );
+    });
+  }
+
+  createImage('./img/img-1.jpg')
+    .then(response => {
+      response.classList.add('images');
+      return waitTwoS();
+    })
+    .then(() => {
+      img.style.display = 'none';
+      return createImage('./img/img-2.jpg');
+    })
+    .then(response => {
+      img.style.display = 'block';
+      return waitTwoS();
+    })
+    .then(() => {
+      img.style.display = 'none';
+    })
+    .catch(err => console.error(err));
+};
+// challenge2();
+
+/*
+ * Review new Promise: the resolve and reject FUNCTIONS
+ */
+function reviewPromises() {
+  const makePromise = function () {
+    const aPromise = new Promise(function (resolve, reject) {
+      if (Math.random() >= 0.5)
+        resolve({ firstName: 'Kamala', lastName: 'Harris' });
+      else reject([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    });
+    aPromise
+      .then(response => {
+        const { firstName, lastName } = response;
+        const initials = firstName[0] + lastName[0];
+        console.log(response, initials);
+      })
+      .catch(response => console.error(response));
+
+    Promise.resolve({ key1: 'value1' }).then(res => console.log(res));
+    Promise.reject([false, {}]).catch(res => console.error(res));
+  };
+  // makePromise();
+
+  const makeWaitFunction = function () {
+    const waitFor = function (seconds) {
+      return new Promise(function (resolve) {
+        setTimeout(() => resolve(seconds), seconds * 1000);
+      });
+    };
+
+    waitFor(3)
+      .then(response => {
+        console.log(`${response} second(s) have passed.`);
+        return waitFor(2);
+      })
+      .then(response => {
+        console.log(`${response} second(s) have passed.`);
+        return waitFor(1);
+      })
+      .then(response => {
+        console.log(`${response} second(s) have passed.`);
+        return waitFor(0);
+      })
+      .then(response => {
+        console.log(`${response} second(s) have passed.`);
+      });
+  };
+  // makeWaitFunction();
+
+  const redoLottery = function () {
+    const lottery = new Promise(function (resolve, reject) {
+      setTimeout(() => {
+        resolve(`${Math.random()}`);
+      }, 1500);
+    });
+    lottery.then(response => {
+      response = (+response).toFixed(3);
+      if (response >= 0.5) console.log(response);
+      else console.error(response);
+    });
+  };
+  // redoLottery();
+
+  const redoWait = function (seconds) {
+    return new Promise(function (resolve) {
+      setTimeout(() => {
+        resolve(seconds);
+      }, seconds * 1000);
+    });
+  };
+  // redoWait(3)
+  //   .then(response => {
+  //     console.log(`${response} second(s) passed`);
+  //     return redoWait(2);
+  //   })
+  //   .then(response => {
+  //     console.log(`${response} second(s) passed`);
+  //     return redoWait(1);
+  //   })
+  //   .then(response => {
+  //     console.log(`${response} second(s) passed`);
+  //     return redoWait(0.2);
+  //   })
+  //   .then(response => console.log(`${response} second(s) passed`));
+
+  const practicePromisifying = function () {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        console.log(position);
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+  };
+  practicePromisifying();
+}
+// reviewPromises();
