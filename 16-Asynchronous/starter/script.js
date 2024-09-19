@@ -18,7 +18,7 @@ const countriesContainer = document.querySelector('.countries');
  */
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 
 /*
@@ -620,4 +620,49 @@ const learnAboutAwait = function () {
   whereAmI();
   console.log('This prints first.');
 };
-learnAboutAwait();
+// learnAboutAwait();
+
+/*
+ * Try & Catch: Handling errors
+ */
+const learnAboutTryCatch = function () {
+  console.log('Learn About Try/Catch');
+
+  const getPosition = function () {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
+
+  // await blocks the execution, but since it's an async function,
+  // the callstack is NOT blocked
+  const whereAmI = async function () {
+    try {
+      // Geolocation
+      const pos = await getPosition();
+      const { latitude: lat, longitude: lng } = pos.coords;
+
+      // Reverse geocoding
+      const resGeo = await fetch(
+        `https://geocode.xyz/${lat},${lng}?geoit=json`
+      );
+      if (!resGeo.ok) throw new Error('Problem getting location data');
+      const dataGeo = await resGeo.json();
+
+      // Country data
+      const res = await fetch(
+        `https://restcountries.com/v3.1/name/${dataGeo.country}`
+      );
+      if (!res.ok) throw new Error('Problem getting country');
+      const data = await res.json();
+
+      renderCountry(data[0]);
+      // behind the scenes, async/await uses .then() [syntactic sugar]
+    } catch (err) {
+      console.error(err);
+      renderError(`💩 ${err}`);
+    }
+  };
+  whereAmI();
+};
+learnAboutTryCatch();
