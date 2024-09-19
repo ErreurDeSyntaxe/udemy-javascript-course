@@ -50,7 +50,7 @@ const renderCountry = function (data, className = '') {
         </div>
       </article>`;
 
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
   countriesContainer.insertAdjacentHTML('beforeend', html);
 };
 
@@ -586,3 +586,38 @@ function reviewPromises() {
   practicePromisifying();
 }
 // reviewPromises();
+
+/*
+ * Async & Await: A better-better way to do then()
+ */
+const learnAboutAwait = function () {
+  const getPosition = function () {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
+
+  // await blocks the execution, but since it's an async function,
+  // the callstack is NOT blocked
+  const whereAmI = async function () {
+    // Geolocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+
+    // Reverse geocoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    const dataGeo = await resGeo.json();
+
+    // Country data
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    );
+    const data = await response.json();
+    renderCountry(data[0]);
+    // behind the scenes, async/await uses .then() [syntactic sugar]
+    console.log('This prints later.');
+  };
+  whereAmI();
+  console.log('This prints first.');
+};
+learnAboutAwait();
