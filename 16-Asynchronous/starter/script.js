@@ -588,7 +588,7 @@ function reviewPromises() {
 // reviewPromises();
 
 /*
- * Async & Await: A better-better way to do then()
+ * Async & Await: A better then() (ALWAYS RETURNS A PROMISE)
  */
 const learnAboutAwait = function () {
   const getPosition = function () {
@@ -665,4 +665,73 @@ const learnAboutTryCatch = function () {
   };
   whereAmI();
 };
-learnAboutTryCatch();
+// learnAboutTryCatch();
+
+/*
+ * Asynchronous functions: inner workings
+ */
+const learnAboutAsynchrony = function () {
+  console.log('Learn About Asynchrony');
+
+  const getPosition = function () {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
+
+  const whereAmI = async function () {
+    try {
+      // Geolocation
+      const pos = await getPosition();
+      const { latitude: lat, longitude: lng } = pos.coords;
+
+      // Reverse geocoding
+      const resGeo = await fetch(
+        `https://geocode.xyz/${lat},${lng}?geoit=json`
+      );
+      if (!resGeo.ok) throw new Error('Problem getting location data');
+      const dataGeo = await resGeo.json();
+
+      // Country data
+      const res = await fetch(
+        `https://restcountries.com/v3.1/name/${dataGeo.country}`
+      );
+      if (!res.ok) throw new Error('Problem getting country');
+      const data = await res.json();
+
+      renderCountry(data[0]);
+
+      return `You live in ${dataGeo.city}, ${dataGeo.country}`;
+      // this returns a string AS THE FULFILLED VALUE OF THE PROMISE
+      // not the string itself
+    } catch (err) {
+      console.error(err);
+      renderError(`💩 ${err}`);
+
+      // re-throwing the error so it is caught again down the line
+      throw err;
+    }
+  };
+
+  // console.log('1: This prints first');
+  // const dwelling = whereAmI();
+  // // console.log(dwelling); // This (a Promise) prints second
+  // dwelling
+  // // This, a consumed promise, prints third
+  // .then(residence => console.log(residence))
+  // .catch(err => console.error(err))
+  // .finally(() => console.log('3: This prints third'));
+  // console.log('4: This prints second');
+
+  console.log('1: This prints first');
+  (async function () {
+    try {
+      const myCity = await whereAmI();
+      console.log(`2:`, myCity);
+    } catch (err) {
+      console.log(`2: ${err.message}`);
+    }
+    console.log('3: This prints third');
+  })();
+};
+learnAboutAsynchrony();
