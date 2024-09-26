@@ -1,4 +1,7 @@
-const budget = [
+'use strict';
+
+// The {} is now immutable
+const budget = Object.freeze([
   { value: 250, description: 'Sold old TV 📺', user: 'jonas' },
   { value: -45, description: 'Groceries 🥑', user: 'jonas' },
   { value: 3500, description: 'Monthly salary 👩‍💻', user: 'jonas' },
@@ -7,42 +10,64 @@ const budget = [
   { value: -20, description: 'Candy 🍭', user: 'matilda' },
   { value: -125, description: 'Toys 🚂', user: 'matilda' },
   { value: -1800, description: 'New Laptop 💻', user: 'jonas' },
-];
+]);
 
-const spendingLimits = {
+// The {} is now immutable
+const spendingLimits = Object.freeze({
   jonas: 1500,
   matilda: 100,
-};
+});
+// spendingLimits.jay = 200; // adding to the frozen Object doesn't work
 
-const addExpense = function (value, description, user = 'jonas') {
-  user = user.toLowerCase();
-  const limit = spendingLimits?.[user] ?? 0;
+const getLimit = (limits, user) => limits?.[user] ?? 0;
 
-  if (value > limit) return; // guard clause
-  budget.push({ value: -value, description, user });
+// when mutating external data, a function is called impure
+// now it is a pure function :D
+const addExpense = function (
+  state,
+  limits,
+  value,
+  description,
+  user = 'jonas'
+) {
+  const cleanUser = user.toLowerCase();
+
+  return value <= getLimit(limits, cleanUser)
+    ? [...state, { value: -value, description, user: cleanUser }]
+    : state;
 };
-addExpense(10, 'Pizza 🍕');
-addExpense(100, 'Going to movies 🍿', 'Matilda');
-addExpense(200, 'Stuff', 'Jay');
+const newBudget1 = addExpense(budget, spendingLimits, 10, 'Pizza 🍕');
+const newBudget2 = addExpense(
+  newBudget1,
+  spendingLimits,
+  100,
+  'Going to movies 🍿',
+  'Matilda'
+);
+const newBudget3 = addExpense(newBudget2, spendingLimits, 200, 'Stuff', 'Jay');
+console.log(`original budget`);
 console.log(budget);
+console.log(`budget 3`);
+console.log(newBudget3);
 
-const checkExpenses = function () {
-  budget.forEach(entry => {
-    if (entry.value < -spendingLimits[entry.user])
-      entry.flag = 'limit exceeded';
+const checkExpenses = function (state, limits) {
+  return state.map(entry => {
+    return entry.value < -getLimit(limits, entry.user)
+      ? { ...entry, flag: 'limit' }
+      : entry;
   });
 };
-checkExpenses();
+const finalBudget = checkExpenses(newBudget3, spendingLimits);
 
-console.log(budget);
+console.log(`final budget`);
+console.log(finalBudget);
 
-const logBigExpenses = function (bigExpense) {
-  let expensesList = '';
-  budget.forEach(entry => {
-    if (entry.value > -bigExpense) return;
-    expensesList += entry.description.slice(-2) + ' / '; // emojis are 2 chars
-  });
-  expensesList = expensesList.slice(0, -2); // Remove last '/ '
-  console.log(expensesList);
+const logBigExpenses = function (state, bigExpense) {
+  const bigExpenses = state
+    .filter(entry => -entry.value >= bigExpense)
+    .map(item => item.description.slice(-2))
+    .join(' / ');
+  console.log('big expenses');
+  console.log(bigExpenses);
 };
-logBigExpenses(1000);
+logBigExpenses(finalBudget, 1000);
