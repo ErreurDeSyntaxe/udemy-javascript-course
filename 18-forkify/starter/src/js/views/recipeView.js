@@ -4,7 +4,15 @@ import fracty from 'fracty';
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = 'We could not find the recipe. Please try another one.';
+  #successMessage = '';
 
+  // removes the recipe/error message previously displayed
+  #clear() {
+    this.#parentElement.innerHTML = '';
+  }
+
+  // process and display the info from fetch
   render(data) {
     this.#data = data;
     const markup = this.#generateMarkup();
@@ -12,11 +20,8 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
-  #clear() {
-    this.#parentElement.innerHTML = '';
-  }
-
-  renderSpinner = function () {
+  // display a spinning icon to indicate loading/processing
+  renderSpinner() {
     const markup = `
     <div class="spinner">
       <svg>
@@ -24,9 +29,41 @@ class RecipeView {
       </svg>
     </div>
     `;
-    this.#parentElement.innerHTML = '';
+    this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  };
+  }
+
+  // display an error if recipe not found
+  renderError(message = this.#errorMessage) {
+    const markup = `
+    <div class="error">
+      <div>
+        <svg>
+          <use href="${icons}#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>  
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  // will use this function later. not sure yet what it is for
+  renderMessage(message = this.#successMessage) {
+    const markup = `
+    <div class="message">
+      <div>
+        <svg>
+          <use href="${icons}#icon-smile"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>  
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
 
   // publisher-subscriber pattern
   addHandlerRender(handler) {
@@ -35,6 +72,7 @@ class RecipeView {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
+  // build the HTML for the recipe
   #generateMarkup() {
     return `
       <figure class="recipe__fig">
@@ -119,6 +157,8 @@ class RecipeView {
         </a>
       </div>`;
   }
+
+  // build the HTML for the recipe's ingredients
   #generateMarkupIngredient(ing) {
     return `
       <li class="recipe__ingredient">
