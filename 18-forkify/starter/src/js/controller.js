@@ -10,7 +10,7 @@ import { async } from 'regenerator-runtime';
 import paginationView from './views/paginationView.js';
 
 // parcel's way of avoiding to re-trigger a state
-if (module.hot) module.hot.accept();
+// if (module.hot) module.hot.accept();
 
 const controlRecipes = async function () {
   try {
@@ -55,9 +55,17 @@ const controlPagination = function (targetPage) {
   paginationView.render(model.state.search);
 };
 
+const controlServings = function (newServings) {
+  // update the recipe servings (in the state)
+  model.updateServings(newServings);
+  // update the recipe view
+  recipeView.render(model.state.recipe);
+};
+
 // publisher-subscriber
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
+  recipeView.addHandlerUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
 };
