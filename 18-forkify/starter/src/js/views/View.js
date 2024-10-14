@@ -21,9 +21,6 @@ export default class View {
 
   // update only the changes (the text) (not the whole View)
   update(data) {
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderError();
-
     this._data = data;
     const newMarkup = this._generateMarkup();
 
