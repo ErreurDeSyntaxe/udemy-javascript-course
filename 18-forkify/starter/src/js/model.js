@@ -35,6 +35,7 @@ export const loadSearchResults = async function (query) {
   try {
     // update the state
     state.search.query = query;
+    state.search.page = 1; // user was on page 3 and searched anew
 
     const data = await getJSON(`${API_URL}?search=${query}`);
 
