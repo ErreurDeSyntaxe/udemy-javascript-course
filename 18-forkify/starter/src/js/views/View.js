@@ -19,6 +19,39 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // update only the changes (the text) (not the whole View)
+  update(data) {
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderError();
+
+    this._data = data;
+    const newMarkup = this._generateMarkup();
+
+    // create a virtual DOM so we can compare to the actual DOM
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    // convert to arrays to use forEach & [notation]
+    const newElements = [...newDOM.querySelectorAll('*')];
+    const curElements = [...this._parentElement.querySelectorAll('*')];
+
+    // loop over virtual DOM
+    newElements.forEach((newEl, i) => {
+      const curEl = curElements[i];
+
+      // updates changed text
+      if (
+        !newEl.isEqualNode(curEl) &&
+        newEl.firstChild?.nodeValue.trim() !== ''
+      )
+        curEl.textContent = newEl.textContent;
+
+      // updates changed attribute values
+      if (!newEl.isEqualNode(curEl))
+        [...newEl.attributes].forEach(attr =>
+          curEl.setAttribute(attr.name, attr.value)
+        );
+    });
+  }
+
   // display a spinning icon to indicate loading/processing
   renderSpinner() {
     const markup = `
