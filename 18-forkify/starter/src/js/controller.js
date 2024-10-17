@@ -4,11 +4,12 @@ import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
+import paginationView from './views/paginationView.js';
+import addRecipeView from './views/addRecipeView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { async } from 'regenerator-runtime';
-import paginationView from './views/paginationView.js';
 
 // parcel's way of avoiding to re-trigger a state
 // if (module.hot) module.hot.accept();
@@ -87,6 +88,11 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+  // In reality, we would upload to the API/DB
+};
+
 // publisher-subscriber
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
@@ -95,5 +101,6 @@ const init = function () {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 init();
