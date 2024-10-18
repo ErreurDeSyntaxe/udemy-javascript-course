@@ -10,8 +10,8 @@ export default class View {
 
   /**
    * Render the received object to the DOM
-   * @param {Obect | Object[]} data The data to be rendered (eg: recipe)
-   * @param {boolean} [render=true] If failse, create markup instead of rendering to DOM
+   * @param {Object | Object[]} data The data to be rendered (eg: recipe)
+   * @param {boolean} [render=true] If false, create markup instead of rendering to DOM
    * @returns {undefined | string} A markup string is returned is render=false
    * @this {Object} View instance
    * @author Jonas Schmedtmann
