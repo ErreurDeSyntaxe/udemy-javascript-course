@@ -104,6 +104,12 @@ const controlAddRecipe = async function (newRecipe) {
     // display success message
     addRecipeView.renderMessage();
 
+    // Render boomark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change url ID
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
     // close form window
     setTimeout(() => {
       addRecipeView.toggleWindow();
